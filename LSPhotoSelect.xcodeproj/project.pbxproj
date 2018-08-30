@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B11BC066B221BD1FA3D30B4 /* libPods-LSPhotoSelectTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 06E67A0BC68F267A7D9E2DFE /* libPods-LSPhotoSelectTests.a */; };
 		53530E8C21377CD90051D731 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 53530E8B21377CD90051D731 /* AppDelegate.m */; };
 		53530E8F21377CD90051D731 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53530E8E21377CD90051D731 /* ViewController.m */; };
 		53530E9221377CD90051D731 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 53530E9021377CD90051D731 /* Main.storyboard */; };
@@ -15,6 +16,12 @@
 		53530E9A21377CDC0051D731 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 53530E9921377CDC0051D731 /* main.m */; };
 		53530EA421377CDC0051D731 /* LSPhotoSelectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 53530EA321377CDC0051D731 /* LSPhotoSelectTests.m */; };
 		53530EAF21377CDC0051D731 /* LSPhotoSelectUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 53530EAE21377CDC0051D731 /* LSPhotoSelectUITests.m */; };
+		53A52D532137C0460061ECAD /* LSAssetCollectionListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A52D522137C0460061ECAD /* LSAssetCollectionListVC.m */; };
+		53A52D562137C05E0061ECAD /* LSAssetCollectionVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A52D552137C05E0061ECAD /* LSAssetCollectionVC.m */; };
+		53A52D602137C4130061ECAD /* LSPhotoSelectNavC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A52D5F2137C4130061ECAD /* LSPhotoSelectNavC.m */; };
+		53A52D652137E8B90061ECAD /* UIViewController+LSAuthorization.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A52D642137E8B90061ECAD /* UIViewController+LSAuthorization.m */; };
+		54979C184CF5D77EF36CBE63 /* libPods-LSPhotoSelect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DEEE204A99829E0CA18D2710 /* libPods-LSPhotoSelect.a */; };
+		9A6DC4EB74F8EF1295BBE9DC /* libPods-LSPhotoSelectUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A2BB3357F2B8BF746E3F04A /* libPods-LSPhotoSelectUITests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +42,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		06E67A0BC68F267A7D9E2DFE /* libPods-LSPhotoSelectTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LSPhotoSelectTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3FD9EEEE95148A83BC6D17ED /* Pods-LSPhotoSelect.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LSPhotoSelect.release.xcconfig"; path = "Pods/Target Support Files/Pods-LSPhotoSelect/Pods-LSPhotoSelect.release.xcconfig"; sourceTree = "<group>"; };
 		53530E8721377CD90051D731 /* LSPhotoSelect.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LSPhotoSelect.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		53530E8A21377CD90051D731 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		53530E8B21377CD90051D731 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -51,6 +60,24 @@
 		53530EAA21377CDC0051D731 /* LSPhotoSelectUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LSPhotoSelectUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		53530EAE21377CDC0051D731 /* LSPhotoSelectUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSPhotoSelectUITests.m; sourceTree = "<group>"; };
 		53530EB021377CDC0051D731 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		53A52D512137C0460061ECAD /* LSAssetCollectionListVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSAssetCollectionListVC.h; sourceTree = "<group>"; };
+		53A52D522137C0460061ECAD /* LSAssetCollectionListVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSAssetCollectionListVC.m; sourceTree = "<group>"; };
+		53A52D542137C05E0061ECAD /* LSAssetCollectionVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSAssetCollectionVC.h; sourceTree = "<group>"; };
+		53A52D552137C05E0061ECAD /* LSAssetCollectionVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSAssetCollectionVC.m; sourceTree = "<group>"; };
+		53A52D5B2137C11C0061ECAD /* LSPhotoBrowse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSPhotoBrowse.h; sourceTree = "<group>"; };
+		53A52D5C2137C12F0061ECAD /* LSPhotoSelect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSPhotoSelect.h; sourceTree = "<group>"; };
+		53A52D5D2137C1AF0061ECAD /* LSPrefixHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSPrefixHeader.h; sourceTree = "<group>"; };
+		53A52D5E2137C4130061ECAD /* LSPhotoSelectNavC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSPhotoSelectNavC.h; sourceTree = "<group>"; };
+		53A52D5F2137C4130061ECAD /* LSPhotoSelectNavC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSPhotoSelectNavC.m; sourceTree = "<group>"; };
+		53A52D632137E8B90061ECAD /* UIViewController+LSAuthorization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+LSAuthorization.h"; sourceTree = "<group>"; };
+		53A52D642137E8B90061ECAD /* UIViewController+LSAuthorization.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+LSAuthorization.m"; sourceTree = "<group>"; };
+		7C71942C98FECA72A03145AF /* Pods-LSPhotoSelectUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LSPhotoSelectUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LSPhotoSelectUITests/Pods-LSPhotoSelectUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		973262ABA689F4FE33D4C2F8 /* Pods-LSPhotoSelect.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LSPhotoSelect.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LSPhotoSelect/Pods-LSPhotoSelect.debug.xcconfig"; sourceTree = "<group>"; };
+		9A2BB3357F2B8BF746E3F04A /* libPods-LSPhotoSelectUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LSPhotoSelectUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9ADB3144E12CD20AF9D26E81 /* Pods-LSPhotoSelectTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LSPhotoSelectTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LSPhotoSelectTests/Pods-LSPhotoSelectTests.debug.xcconfig"; sourceTree = "<group>"; };
+		A7832E99B5CAB7B2FB65CDEE /* Pods-LSPhotoSelectTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LSPhotoSelectTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-LSPhotoSelectTests/Pods-LSPhotoSelectTests.release.xcconfig"; sourceTree = "<group>"; };
+		D21986B167359652EB6FFC8B /* Pods-LSPhotoSelectUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LSPhotoSelectUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-LSPhotoSelectUITests/Pods-LSPhotoSelectUITests.release.xcconfig"; sourceTree = "<group>"; };
+		DEEE204A99829E0CA18D2710 /* libPods-LSPhotoSelect.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LSPhotoSelect.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				54979C184CF5D77EF36CBE63 /* libPods-LSPhotoSelect.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +93,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B11BC066B221BD1FA3D30B4 /* libPods-LSPhotoSelectTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,12 +101,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A6DC4EB74F8EF1295BBE9DC /* libPods-LSPhotoSelectUITests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3CC68229ED2166B18C4C4475 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				973262ABA689F4FE33D4C2F8 /* Pods-LSPhotoSelect.debug.xcconfig */,
+				3FD9EEEE95148A83BC6D17ED /* Pods-LSPhotoSelect.release.xcconfig */,
+				9ADB3144E12CD20AF9D26E81 /* Pods-LSPhotoSelectTests.debug.xcconfig */,
+				A7832E99B5CAB7B2FB65CDEE /* Pods-LSPhotoSelectTests.release.xcconfig */,
+				7C71942C98FECA72A03145AF /* Pods-LSPhotoSelectUITests.debug.xcconfig */,
+				D21986B167359652EB6FFC8B /* Pods-LSPhotoSelectUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		53530E7E21377CD90051D731 = {
 			isa = PBXGroup;
 			children = (
@@ -85,6 +128,8 @@
 				53530EA221377CDC0051D731 /* LSPhotoSelectTests */,
 				53530EAD21377CDC0051D731 /* LSPhotoSelectUITests */,
 				53530E8821377CD90051D731 /* Products */,
+				3CC68229ED2166B18C4C4475 /* Pods */,
+				758691DE39505EF0A61BA6F8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -101,6 +146,9 @@
 		53530E8921377CD90051D731 /* LSPhotoSelect */ = {
 			isa = PBXGroup;
 			children = (
+				53A52D612137E7E80061ECAD /* Authorization */,
+				53A52D572137C09C0061ECAD /* PhotoBrowse */,
+				53A52D4D2137803B0061ECAD /* PhotoSelect */,
 				53530E8A21377CD90051D731 /* AppDelegate.h */,
 				53530E8B21377CD90051D731 /* AppDelegate.m */,
 				53530E8D21377CD90051D731 /* ViewController.h */,
@@ -110,6 +158,7 @@
 				53530E9521377CDC0051D731 /* LaunchScreen.storyboard */,
 				53530E9821377CDC0051D731 /* Info.plist */,
 				53530E9921377CDC0051D731 /* main.m */,
+				53A52D5D2137C1AF0061ECAD /* LSPrefixHeader.h */,
 			);
 			path = LSPhotoSelect;
 			sourceTree = "<group>";
@@ -132,6 +181,95 @@
 			path = LSPhotoSelectUITests;
 			sourceTree = "<group>";
 		};
+		53A52D4D2137803B0061ECAD /* PhotoSelect */ = {
+			isa = PBXGroup;
+			children = (
+				53A52D4E2137BF570061ECAD /* Controller */,
+				53A52D502137BF630061ECAD /* Model */,
+				53A52D4F2137BF5E0061ECAD /* View */,
+				53A52D5C2137C12F0061ECAD /* LSPhotoSelect.h */,
+			);
+			path = PhotoSelect;
+			sourceTree = "<group>";
+		};
+		53A52D4E2137BF570061ECAD /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				53A52D512137C0460061ECAD /* LSAssetCollectionListVC.h */,
+				53A52D522137C0460061ECAD /* LSAssetCollectionListVC.m */,
+				53A52D542137C05E0061ECAD /* LSAssetCollectionVC.h */,
+				53A52D552137C05E0061ECAD /* LSAssetCollectionVC.m */,
+				53A52D5E2137C4130061ECAD /* LSPhotoSelectNavC.h */,
+				53A52D5F2137C4130061ECAD /* LSPhotoSelectNavC.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		53A52D4F2137BF5E0061ECAD /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		53A52D502137BF630061ECAD /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		53A52D572137C09C0061ECAD /* PhotoBrowse */ = {
+			isa = PBXGroup;
+			children = (
+				53A52D582137C0B50061ECAD /* Controller */,
+				53A52D5A2137C0C20061ECAD /* Model */,
+				53A52D592137C0BC0061ECAD /* View */,
+				53A52D5B2137C11C0061ECAD /* LSPhotoBrowse.h */,
+			);
+			path = PhotoBrowse;
+			sourceTree = "<group>";
+		};
+		53A52D582137C0B50061ECAD /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		53A52D592137C0BC0061ECAD /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		53A52D5A2137C0C20061ECAD /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		53A52D612137E7E80061ECAD /* Authorization */ = {
+			isa = PBXGroup;
+			children = (
+				53A52D632137E8B90061ECAD /* UIViewController+LSAuthorization.h */,
+				53A52D642137E8B90061ECAD /* UIViewController+LSAuthorization.m */,
+			);
+			path = Authorization;
+			sourceTree = "<group>";
+		};
+		758691DE39505EF0A61BA6F8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DEEE204A99829E0CA18D2710 /* libPods-LSPhotoSelect.a */,
+				06E67A0BC68F267A7D9E2DFE /* libPods-LSPhotoSelectTests.a */,
+				9A2BB3357F2B8BF746E3F04A /* libPods-LSPhotoSelectUITests.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -139,6 +277,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 53530EB321377CDC0051D731 /* Build configuration list for PBXNativeTarget "LSPhotoSelect" */;
 			buildPhases = (
+				9E90B467E2892E101007A3D1 /* [CP] Check Pods Manifest.lock */,
 				53530E8321377CD90051D731 /* Sources */,
 				53530E8421377CD90051D731 /* Frameworks */,
 				53530E8521377CD90051D731 /* Resources */,
@@ -156,6 +295,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 53530EB621377CDC0051D731 /* Build configuration list for PBXNativeTarget "LSPhotoSelectTests" */;
 			buildPhases = (
+				890F05CD633A3B5F137FD69F /* [CP] Check Pods Manifest.lock */,
 				53530E9B21377CDC0051D731 /* Sources */,
 				53530E9C21377CDC0051D731 /* Frameworks */,
 				53530E9D21377CDC0051D731 /* Resources */,
@@ -174,6 +314,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 53530EB921377CDC0051D731 /* Build configuration list for PBXNativeTarget "LSPhotoSelectUITests" */;
 			buildPhases = (
+				AAB5B3A97F5042FD280EC484 /* [CP] Check Pods Manifest.lock */,
 				53530EA621377CDC0051D731 /* Sources */,
 				53530EA721377CDC0051D731 /* Frameworks */,
 				53530EA821377CDC0051D731 /* Resources */,
@@ -194,6 +335,7 @@
 		53530E7F21377CD90051D731 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = LS;
 				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = "Shuang Lau";
 				TargetAttributes = {
@@ -257,12 +399,73 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		890F05CD633A3B5F137FD69F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-LSPhotoSelectTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9E90B467E2892E101007A3D1 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-LSPhotoSelect-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AAB5B3A97F5042FD280EC484 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-LSPhotoSelectUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		53530E8321377CD90051D731 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53A52D532137C0460061ECAD /* LSAssetCollectionListVC.m in Sources */,
+				53A52D602137C4130061ECAD /* LSPhotoSelectNavC.m in Sources */,
+				53A52D652137E8B90061ECAD /* UIViewController+LSAuthorization.m in Sources */,
 				53530E8F21377CD90051D731 /* ViewController.m in Sources */,
+				53A52D562137C05E0061ECAD /* LSAssetCollectionVC.m in Sources */,
 				53530E9A21377CDC0051D731 /* main.m in Sources */,
 				53530E8C21377CD90051D731 /* AppDelegate.m in Sources */,
 			);
@@ -431,11 +634,14 @@
 		};
 		53530EB421377CDC0051D731 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 973262ABA689F4FE33D4C2F8 /* Pods-LSPhotoSelect.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5C6T98C8KA;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/LSPhotoSelect/LSPrefixHeader.h";
 				INFOPLIST_FILE = LSPhotoSelect/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -448,11 +654,14 @@
 		};
 		53530EB521377CDC0051D731 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3FD9EEEE95148A83BC6D17ED /* Pods-LSPhotoSelect.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5C6T98C8KA;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/LSPhotoSelect/LSPrefixHeader.h";
 				INFOPLIST_FILE = LSPhotoSelect/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -465,6 +674,7 @@
 		};
 		53530EB721377CDC0051D731 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9ADB3144E12CD20AF9D26E81 /* Pods-LSPhotoSelectTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -484,6 +694,7 @@
 		};
 		53530EB821377CDC0051D731 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A7832E99B5CAB7B2FB65CDEE /* Pods-LSPhotoSelectTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -503,6 +714,7 @@
 		};
 		53530EBA21377CDC0051D731 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7C71942C98FECA72A03145AF /* Pods-LSPhotoSelectUITests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5C6T98C8KA;
@@ -521,6 +733,7 @@
 		};
 		53530EBB21377CDC0051D731 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D21986B167359652EB6FFC8B /* Pods-LSPhotoSelectUITests.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5C6T98C8KA;

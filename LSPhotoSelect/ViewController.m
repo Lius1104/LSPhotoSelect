@@ -19,6 +19,11 @@
     // Do any additional setup after loading the view, typically from a nib.
 }
 
+- (IBAction)handleJumpToSelectPhoto:(id)sender {
+//    LSPhotoSelectNavC * navC = [LSPhotoSelectNavC ls_defaultPhotoSelectNavC];
+//    [self presentViewController:navC animated:YES completion:nil];
+    [LSPhotoSelectNavC ls_presentDefaultPhotoSelectNavCFrom:self];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
