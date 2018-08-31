@@ -16,6 +16,9 @@
 		53530E9A21377CDC0051D731 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 53530E9921377CDC0051D731 /* main.m */; };
 		53530EA421377CDC0051D731 /* LSPhotoSelectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 53530EA321377CDC0051D731 /* LSPhotoSelectTests.m */; };
 		53530EAF21377CDC0051D731 /* LSPhotoSelectUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 53530EAE21377CDC0051D731 /* LSPhotoSelectUITests.m */; };
+		53536B162138D2BB005D6A0C /* LSAlbumModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 53536B152138D2BB005D6A0C /* LSAlbumModel.m */; };
+		53536B192138D5C3005D6A0C /* LSAlbumListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53536B182138D5C3005D6A0C /* LSAlbumListCell.m */; };
+		53536B1E213920E7005D6A0C /* LSAssetItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53536B1D213920E7005D6A0C /* LSAssetItemCell.m */; };
 		53A52D532137C0460061ECAD /* LSAssetCollectionListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A52D522137C0460061ECAD /* LSAssetCollectionListVC.m */; };
 		53A52D562137C05E0061ECAD /* LSAssetCollectionVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A52D552137C05E0061ECAD /* LSAssetCollectionVC.m */; };
 		53A52D602137C4130061ECAD /* LSPhotoSelectNavC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A52D5F2137C4130061ECAD /* LSPhotoSelectNavC.m */; };
@@ -60,6 +63,14 @@
 		53530EAA21377CDC0051D731 /* LSPhotoSelectUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LSPhotoSelectUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		53530EAE21377CDC0051D731 /* LSPhotoSelectUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSPhotoSelectUITests.m; sourceTree = "<group>"; };
 		53530EB021377CDC0051D731 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		53536B142138D2BB005D6A0C /* LSAlbumModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSAlbumModel.h; sourceTree = "<group>"; };
+		53536B152138D2BB005D6A0C /* LSAlbumModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSAlbumModel.m; sourceTree = "<group>"; };
+		53536B172138D5C3005D6A0C /* LSAlbumListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSAlbumListCell.h; sourceTree = "<group>"; };
+		53536B182138D5C3005D6A0C /* LSAlbumListCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSAlbumListCell.m; sourceTree = "<group>"; };
+		53536B1A2138EA3E005D6A0C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		53536B1B2138EA3E005D6A0C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		53536B1C213920E7005D6A0C /* LSAssetItemCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSAssetItemCell.h; sourceTree = "<group>"; };
+		53536B1D213920E7005D6A0C /* LSAssetItemCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSAssetItemCell.m; sourceTree = "<group>"; };
 		53A52D512137C0460061ECAD /* LSAssetCollectionListVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSAssetCollectionListVC.h; sourceTree = "<group>"; };
 		53A52D522137C0460061ECAD /* LSAssetCollectionListVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSAssetCollectionListVC.m; sourceTree = "<group>"; };
 		53A52D542137C05E0061ECAD /* LSAssetCollectionVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSAssetCollectionVC.h; sourceTree = "<group>"; };
@@ -208,6 +219,10 @@
 		53A52D4F2137BF5E0061ECAD /* View */ = {
 			isa = PBXGroup;
 			children = (
+				53536B172138D5C3005D6A0C /* LSAlbumListCell.h */,
+				53536B182138D5C3005D6A0C /* LSAlbumListCell.m */,
+				53536B1C213920E7005D6A0C /* LSAssetItemCell.h */,
+				53536B1D213920E7005D6A0C /* LSAssetItemCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -215,6 +230,8 @@
 		53A52D502137BF630061ECAD /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				53536B142138D2BB005D6A0C /* LSAlbumModel.h */,
+				53536B152138D2BB005D6A0C /* LSAlbumModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -463,9 +480,12 @@
 			files = (
 				53A52D532137C0460061ECAD /* LSAssetCollectionListVC.m in Sources */,
 				53A52D602137C4130061ECAD /* LSPhotoSelectNavC.m in Sources */,
+				53536B162138D2BB005D6A0C /* LSAlbumModel.m in Sources */,
 				53A52D652137E8B90061ECAD /* UIViewController+LSAuthorization.m in Sources */,
 				53530E8F21377CD90051D731 /* ViewController.m in Sources */,
+				53536B192138D5C3005D6A0C /* LSAlbumListCell.m in Sources */,
 				53A52D562137C05E0061ECAD /* LSAssetCollectionVC.m in Sources */,
+				53536B1E213920E7005D6A0C /* LSAssetItemCell.m in Sources */,
 				53530E9A21377CDC0051D731 /* main.m in Sources */,
 				53530E8C21377CD90051D731 /* AppDelegate.m in Sources */,
 			);
@@ -507,6 +527,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				53530E9121377CD90051D731 /* Base */,
+				53536B1A2138EA3E005D6A0C /* zh-Hans */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -515,6 +536,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				53530E9621377CDC0051D731 /* Base */,
+				53536B1B2138EA3E005D6A0C /* zh-Hans */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -526,6 +548,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -584,6 +607,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
