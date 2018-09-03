@@ -14,7 +14,7 @@
 
 typedef void(^PHCoverImageBlock)(UIImage * coverImg);
 
-@interface LSAssetCollectionListVC ()<UITableViewDelegate, UITableViewDataSource>
+@interface LSAssetCollectionListVC ()<UITableViewDelegate, UITableViewDataSource, PHPhotoLibraryChangeObserver>
 
 @property (nonatomic, strong) PHCachingImageManager * manager;
 
@@ -23,6 +23,10 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
 @property (nonatomic, strong) UITableView * tableView;
 
 @property (nonatomic, strong) NSMutableArray <LSAlbumModel *>* albumSource;
+
+@property (nonatomic, strong) PHFetchResult <PHAssetCollection *>* smartAlbums;
+
+@property (nonatomic, strong) PHFetchResult <PHAssetCollection *>* userAlbums;
 
 @property (nonatomic, strong) PHAssetCollection * userLibrary;
 
@@ -72,6 +76,10 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
     return self;
 }
 
+- (void)dealloc {
+    [[PHPhotoLibrary sharedPhotoLibrary] unregisterChangeObserver:self];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -90,6 +98,8 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
         }
     }];
 
+    [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
+    
     // 跳转到 所有照片中
     [self jumpToAlbum:_userLibrary animated:NO];
 }
@@ -114,10 +124,13 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
 #pragma mark - private
 - (void)getAllAssetCollections {
     // 监测权限，哈哈，不知道为什么今天很开心
-    [self.albumSource removeAllObjects];
-//    PHFetchOptions * albumOptions = [[PHFetchOptions alloc] init];
-//    NSSortDescriptor * sortDes = [NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES];
-//    albumOptions.sortDescriptors = @[sortDes];
+    _smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
+    _userAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeSmartAlbumUserLibrary options:nil];
+    
+    [self updateAlbums];
+}
+
+- (void)updateAlbums {
     PHFetchOptions * options = [[PHFetchOptions alloc] init];
     switch (_assetType) {
         case LSAssetTypeAll: {
@@ -134,8 +147,8 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
             break;
     }
     
-    PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
-    for (PHAssetCollection * assetCollection in smartAlbums) {
+    [self.albumSource removeAllObjects];
+    for (PHAssetCollection * assetCollection in _smartAlbums) {
         if (assetCollection.assetCollectionSubtype != PHAssetCollectionSubtypeSmartAlbumAllHidden) {
             PHFetchResult * result = [PHAsset fetchAssetsInAssetCollection:assetCollection options:options];
             LSAlbumModel * album = [[LSAlbumModel alloc] init];
@@ -154,8 +167,7 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
         }
     }
     
-    PHFetchResult *albums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeSmartAlbumUserLibrary options:nil];
-    for (PHAssetCollection * assetCollection in albums) {
+    for (PHAssetCollection * assetCollection in _userAlbums) {
         PHFetchResult * result = [PHAsset fetchAssetsInAssetCollection:assetCollection options:options];
         if (result.count > 0) {
             LSAlbumModel * album = [[LSAlbumModel alloc] init];
@@ -194,6 +206,23 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
 #pragma mark - action
 - (void)handleBack {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - PHPhotoLibraryChangeObserver
+- (void)photoLibraryDidChange:(PHChange *)changeInstance {
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        
+        PHFetchResultChangeDetails * changeDetail = [changeInstance changeDetailsForFetchResult:self.smartAlbums];
+        if (changeDetail) {
+            self.smartAlbums = changeDetail.fetchResultAfterChanges;
+        }
+        changeDetail = [changeInstance changeDetailsForFetchResult:self.userAlbums];
+        if (changeDetail) {
+            self.userAlbums = changeDetail.fetchResultAfterChanges;
+        }
+        [self updateAlbums];
+        [self.tableView reloadData];
+    });
 }
 
 #pragma mark - UITableViewDelegate, UITableViewDataSource
