@@ -22,14 +22,46 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
 
 @property (nonatomic, strong) PHAssetCollection * userLibrary;
 
+@property (nonatomic, assign) LSAssetType assetType;
+
+@property (nonatomic, assign) NSInteger lineItemCount;
+
+@property (nonatomic, assign) UIEdgeInsets sectionInset;
+
+@property (nonatomic, assign) CGFloat space;
+
 @end
 
 @implementation LSAssetCollectionListVC
 
+- (instancetype)initWithAssetType:(LSAssetType)assetType lineItemCount:(NSInteger)lineItemCount sectionInset:(UIEdgeInsets)sectionInset space:(CGFloat)space {
+    self = [super init];
+    if (self) {
+        _assetType = assetType;
+        if (lineItemCount == 0) {
+            _lineItemCount = 4;
+        } else {
+            _lineItemCount = lineItemCount;
+        }
+        
+        _sectionInset = sectionInset;
+        _space = space < 0 ? 0 : space;
+        
+    }
+    return self;
+}
+
 - (instancetype)init {
     self = [super init];
     if (self) {
+        // 默认值
+        _assetType = LSAssetTypeAll;
+        _lineItemCount = 4;
+        _space = 3;
+        _sectionInset = UIEdgeInsetsMake(3, 3, 3, 3);
+        
         _albumSource = [NSMutableArray arrayWithCapacity:1];
+        
         // 获取所有相册
         [self getAllAssetCollections];
     }
@@ -80,19 +112,34 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
     // 监测权限，哈哈，不知道为什么今天很开心
     [self.albumSource removeAllObjects];
     PHFetchOptions * options = [[PHFetchOptions alloc] init];
-    options.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld || mediaType == %ld", PHAssetMediaTypeImage, PHAssetMediaTypeVideo];
+    switch (_assetType) {
+        case LSAssetTypeAll: {
+            options.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld || mediaType == %ld", PHAssetMediaTypeImage, PHAssetMediaTypeVideo];
+        }
+            break;
+        case LSAssetTypeImages: {
+            options.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld", PHAssetMediaTypeImage];
+        }
+            break;
+        case LSAssetTypeVideos: {
+            options.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld", PHAssetMediaTypeVideo];
+        }
+            break;
+    }
     
     PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
     for (PHAssetCollection * assetCollection in smartAlbums) {
         if (assetCollection.assetCollectionSubtype != PHAssetCollectionSubtypeSmartAlbumAllHidden) {
             PHFetchResult * result = [PHAsset fetchAssetsInAssetCollection:assetCollection options:options];
-            if (assetCollection.assetCollectionSubtype == PHAssetCollectionSubtypeSmartAlbumUserLibrary) {
-                _userLibrary = assetCollection;
-            }
             LSAlbumModel * album = [[LSAlbumModel alloc] init];
             album.assetCollection = assetCollection;
             album.sourceCount = result.count;
-            [self.albumSource addObject:album];
+            if (assetCollection.assetCollectionSubtype == PHAssetCollectionSubtypeSmartAlbumUserLibrary) {
+                _userLibrary = assetCollection;
+                [self.albumSource insertObject:album atIndex:0];
+            } else {
+                [self.albumSource addObject:album];
+            }
             // 获取 相册封面
             [self getAssetCollection:assetCollection coverImg:^(UIImage *coverImg) {
                 album.coverImg = coverImg;
@@ -123,17 +170,17 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
         return;
     }
     
-    PHImageManager * manager = [[PHImageManager alloc] init];
+    PHCachingImageManager * manager = [[PHCachingImageManager alloc] init];
     PHAsset * asset = [fetchResult firstObject];
-    PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
-    options.synchronous = YES;//为了效果，我这里选择了同步 因为只获取一张照片，不会对界面产生很大的影响
-    [manager requestImageForAsset:asset targetSize:CGSizeMake(60, 60) contentMode:PHImageContentModeDefault options:options resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+//    PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
+//    options.synchronous = YES;//为了效果，我这里选择了同步 因为只获取一张照片，不会对界面产生很大的影响
+    [manager requestImageForAsset:asset targetSize:CGSizeMake(60, 60) contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
         coverImageBlock(result);
     }];
 }
 
 - (void)jumpToAlbum:(PHAssetCollection *)assetCollection animated:(BOOL)animated {
-    LSAssetCollectionVC * assetVC = [[LSAssetCollectionVC alloc] initWithAssetCollection:assetCollection assetType:LSAssetTypeAll itemSize:CGSizeZero];
+    LSAssetCollectionVC * assetVC = [[LSAssetCollectionVC alloc] initWithAssetCollection:assetCollection assetType:LSAssetTypeImages lineItemCount:4 sectionInset:UIEdgeInsetsMake(3, 3, 3, 3) space:3];
     UIBarButtonItem * backItem = [[UIBarButtonItem alloc] init];
     backItem.title = @"返回";
     self.navigationItem.backBarButtonItem = backItem;

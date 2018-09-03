@@ -71,6 +71,7 @@
 		53536B1B2138EA3E005D6A0C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		53536B1C213920E7005D6A0C /* LSAssetItemCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSAssetItemCell.h; sourceTree = "<group>"; };
 		53536B1D213920E7005D6A0C /* LSAssetItemCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSAssetItemCell.m; sourceTree = "<group>"; };
+		536369D2213CD13C003446DF /* LSPhotoSelectEnums.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSPhotoSelectEnums.h; sourceTree = "<group>"; };
 		53A52D512137C0460061ECAD /* LSAssetCollectionListVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSAssetCollectionListVC.h; sourceTree = "<group>"; };
 		53A52D522137C0460061ECAD /* LSAssetCollectionListVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSAssetCollectionListVC.m; sourceTree = "<group>"; };
 		53A52D542137C05E0061ECAD /* LSAssetCollectionVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSAssetCollectionVC.h; sourceTree = "<group>"; };
@@ -199,6 +200,7 @@
 				53A52D502137BF630061ECAD /* Model */,
 				53A52D4F2137BF5E0061ECAD /* View */,
 				53A52D5C2137C12F0061ECAD /* LSPhotoSelect.h */,
+				536369D2213CD13C003446DF /* LSPhotoSelectEnums.h */,
 			);
 			path = PhotoSelect;
 			sourceTree = "<group>";

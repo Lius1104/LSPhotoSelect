@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^PhotoLibraryUsageAuthBlock)(PHAuthorizationStatus status);
+
 @interface UIViewController (LSAuthorization)
 
-- (void)judgeAppPhotoLibraryUsageAuth;
+- (void)judgeAppPhotoLibraryUsageAuth:(PhotoLibraryUsageAuthBlock)authBlock;
 
 @end

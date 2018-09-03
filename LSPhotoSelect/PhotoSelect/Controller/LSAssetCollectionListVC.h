@@ -10,4 +10,6 @@
 
 @interface LSAssetCollectionListVC : UIViewController
 
+- (instancetype)initWithAssetType:(LSAssetType)assetType lineItemCount:(NSInteger)lineItemCount sectionInset:(UIEdgeInsets)sectionInset space:(CGFloat)space;
+
 @end

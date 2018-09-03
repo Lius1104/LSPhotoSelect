@@ -20,9 +20,26 @@
 }
 
 - (IBAction)handleJumpToSelectPhoto:(id)sender {
-//    LSPhotoSelectNavC * navC = [LSPhotoSelectNavC ls_defaultPhotoSelectNavC];
-//    [self presentViewController:navC animated:YES completion:nil];
-    [LSPhotoSelectNavC ls_presentDefaultPhotoSelectNavCFrom:self];
+    [self judgeAppPhotoLibraryUsageAuth:^(PHAuthorizationStatus status) {
+        switch (status) {
+            case PHAuthorizationStatusRestricted: {
+                NSLog(@"访问限制.");
+            }
+                break;
+            case PHAuthorizationStatusDenied: {
+                NSLog(@"访问被拒.");
+            }
+                break;
+            case PHAuthorizationStatusAuthorized: {
+                [self presentViewController:[LSPhotoSelectNavC ls_defaultPhotoSelectNavC] animated:YES completion:nil];
+            }
+                break;
+            case PHAuthorizationStatusNotDetermined: {
+                NSLog(@"未决定.");
+            }
+                break;
+        }
+    }];
 }
 
 - (void)didReceiveMemoryWarning {

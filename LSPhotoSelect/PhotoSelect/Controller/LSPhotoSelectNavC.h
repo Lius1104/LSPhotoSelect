@@ -17,6 +17,24 @@
  */
 + (LSPhotoSelectNavC *)ls_defaultPhotoSelectNavC;
 
-+ (void)ls_presentDefaultPhotoSelectNavCFrom:(UIViewController *)fromVC;
+/**
+ 默认跳转
+
+ @param fromVC 需要跳转的页面
+ */
+//+ (void)ls_presentDefaultPhotoSelectNavCFrom:(UIViewController *)fromVC;
+
+/**
+ 自定义初始化方法
+
+ @param assetType 资源类型
+ @param lineItemCount 每行的 item 个数
+ @param sectionInset section inset
+ @param space item 之间的间距
+ @return navigationController
+ */
+- (instancetype)initWithAssetType:(LSAssetType)assetType lineItemCount:(NSInteger)lineItemCount sectionInset:(UIEdgeInsets)sectionInset space:(CGFloat)space;
+
+- (void)ls_presentPhotoSelectNavCFrom:(UIViewController *)fromVC;
 
 @end

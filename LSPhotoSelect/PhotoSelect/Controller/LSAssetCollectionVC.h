@@ -8,11 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-typedef enum : NSUInteger {
-    LSAssetTypeImages,
-    LSAssetTypeVideos,
-    LSAssetTypeAll,
-} LSAssetType;
 
 @interface LSAssetCollectionVC : UIViewController
 
@@ -20,6 +15,6 @@ typedef enum : NSUInteger {
 
 @property (nonatomic, assign, readonly) LSAssetType assetType;
 
-- (instancetype)initWithAssetCollection:(PHAssetCollection *)assetCollection assetType:(LSAssetType)assetType itemSize:(CGSize)itemSize;
+- (instancetype)initWithAssetCollection:(PHAssetCollection *)assetCollection assetType:(LSAssetType)assetType lineItemCount:(NSInteger)lineItemCount sectionInset:(UIEdgeInsets)sectionInset space:(CGFloat)space;
 
 @end

@@ -21,7 +21,13 @@
 
 @property (nonatomic, strong) PHFetchResult <PHAsset *>* fetchResult;
 
+@property (nonatomic, assign, readonly) NSInteger lineItemCount;
+
 @property (nonatomic, assign) CGSize itemSize;
+
+@property (nonatomic, assign) UIEdgeInsets sectionInset;
+
+@property (nonatomic, assign) CGFloat itemSpace;
 
 @end
 
@@ -31,17 +37,24 @@
     [self resetCachedAssets];
 }
 
-- (instancetype)initWithAssetCollection:(PHAssetCollection *)assetCollection assetType:(LSAssetType)assetType itemSize:(CGSize)itemSize {
+- (instancetype)initWithAssetCollection:(PHAssetCollection *)assetCollection assetType:(LSAssetType)assetType lineItemCount:(NSInteger)lineItemCount sectionInset:(UIEdgeInsets)sectionInset space:(CGFloat)space {
     self = [super init];
     if (self) {
         _assetCollection = assetCollection;
         _assetType = assetType;
-        if (itemSize.width == 0 || itemSize.height == 0) {
-            CGFloat width = ([UIScreen mainScreen].bounds.size.width - 15) / 4.f;
-            _itemSize = CGSizeMake(width, width);
+        _sectionInset = sectionInset;
+        _itemSpace = space;
+        
+        if (lineItemCount == 0) {
+            _lineItemCount = 4;
         } else {
-            _itemSize = itemSize;
+            _lineItemCount = lineItemCount;
         }
+        
+        CGFloat availableWidth = CGRectGetWidth([UIScreen mainScreen].bounds) - _sectionInset.left - _sectionInset.right - (space * (lineItemCount - 1));
+        CGFloat width = availableWidth / _lineItemCount;
+        _itemSize = CGSizeMake(width, width);
+        
         _manager = [[PHCachingImageManager alloc] init];
     }
     return self;
@@ -65,11 +78,7 @@
         }
     }];
     [self getAllAssets];
-    if (_fetchResult.count > 0) {
-        [_collectionView reloadData];
-        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:(_fetchResult.count - 1) inSection:0];
-        [_collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
-    }
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -79,6 +88,16 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    if (_fetchResult.count > 0) {
+        [_collectionView reloadData];
+        NSInteger count = _fetchResult.count;
+        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:(count - 1) inSection:0];
+        [_collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
+    }
 }
 
 - (void)getAllAssets {
@@ -166,7 +185,7 @@
 
 - (void)imageManagerStartCachingImagesWithRect:(CGRect)rect {
     NSMutableArray<PHAsset *> *addAssets = [self indexPathsForElementsWithRect:rect];
-    [_manager startCachingImagesForAssets:addAssets targetSize:_itemSize contentMode:PHImageContentModeAspectFill options: nil];
+    [_manager startCachingImagesForAssets:addAssets targetSize:_itemSize contentMode:PHImageContentModeAspectFill options:nil];
 }
 
 - (void)imageManagerStopCachingImagesWithRect:(CGRect)rect {
@@ -212,9 +231,9 @@
     if (indexPath.row < _fetchResult.count) {
         PHAsset * asset = [_fetchResult objectAtIndex:indexPath.row];
         cell.localIdentifier = asset.localIdentifier;
-        PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
-        options.synchronous = YES;
-        [_manager requestImageForAsset:asset targetSize:_itemSize contentMode:PHImageContentModeAspectFill options:options resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+//        PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
+//        options.synchronous = YES;
+        [_manager requestImageForAsset:asset targetSize:_itemSize contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
             if ([cell.localIdentifier isEqualToString:asset.localIdentifier]) {
                 cell.coverImageView.image = result;
             }
@@ -227,10 +246,11 @@
 - (UICollectionView *)collectionView {
     if (!_collectionView) {
         UICollectionViewFlowLayout * layout = [[UICollectionViewFlowLayout alloc] init];
-        layout.sectionInset = UIEdgeInsetsMake(3, 3, 3, 3);
+//        layout.sectionInset = UIEdgeInsetsMake(3, 3, 3, 3);
+        layout.sectionInset = _sectionInset;
         layout.itemSize = _itemSize;
-        layout.minimumLineSpacing = 3;
-        layout.minimumInteritemSpacing = 3;
+        layout.minimumLineSpacing = _itemSpace;
+        layout.minimumInteritemSpacing = _itemSpace;
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height) collectionViewLayout:layout];
         _collectionView.backgroundColor = [UIColor whiteColor];
         [_collectionView registerClass:[LSAssetItemCell class] forCellWithReuseIdentifier:@"ls_assetItem_Cell"];
