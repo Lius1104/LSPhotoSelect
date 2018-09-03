@@ -26,6 +26,10 @@
         _coverImageView.clipsToBounds = YES;
         [self addSubview:_coverImageView];
         
+        _livePhotoIcon = [[UIImageView alloc] init];
+        _livePhotoIcon.contentMode = UIViewContentModeScaleAspectFill;
+        [self addSubview:_livePhotoIcon];
+        
         _normalButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [self addSubview:_normalButton];
         
@@ -40,6 +44,11 @@
 - (void)configConstrains {
     [_coverImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self);
+    }];
+    
+    [_livePhotoIcon mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.equalTo(self);
+        make.size.mas_equalTo(CGSizeMake(28, 28));
     }];
     
     [_normalButton mas_makeConstraints:^(MASConstraintMaker *make) {

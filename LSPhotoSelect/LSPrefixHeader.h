@@ -10,7 +10,9 @@
 #define LSPrefixHeader_h
 
 #import <Photos/Photos.h>
+#import <PhotosUI/PhotosUI.h>
 #import <Masonry.h>
+
 #import "LSPhotoBrowse.h"
 #import "LSPhotoSelect.h"
 

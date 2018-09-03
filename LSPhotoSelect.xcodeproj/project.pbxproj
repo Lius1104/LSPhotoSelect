@@ -19,6 +19,7 @@
 		53536B162138D2BB005D6A0C /* LSAlbumModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 53536B152138D2BB005D6A0C /* LSAlbumModel.m */; };
 		53536B192138D5C3005D6A0C /* LSAlbumListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53536B182138D5C3005D6A0C /* LSAlbumListCell.m */; };
 		53536B1E213920E7005D6A0C /* LSAssetItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53536B1D213920E7005D6A0C /* LSAssetItemCell.m */; };
+		536369D6213D315F003446DF /* NSIndexSet+LSAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = 536369D5213D315F003446DF /* NSIndexSet+LSAdd.m */; };
 		53A52D532137C0460061ECAD /* LSAssetCollectionListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A52D522137C0460061ECAD /* LSAssetCollectionListVC.m */; };
 		53A52D562137C05E0061ECAD /* LSAssetCollectionVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A52D552137C05E0061ECAD /* LSAssetCollectionVC.m */; };
 		53A52D602137C4130061ECAD /* LSPhotoSelectNavC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A52D5F2137C4130061ECAD /* LSPhotoSelectNavC.m */; };
@@ -72,6 +73,9 @@
 		53536B1C213920E7005D6A0C /* LSAssetItemCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSAssetItemCell.h; sourceTree = "<group>"; };
 		53536B1D213920E7005D6A0C /* LSAssetItemCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSAssetItemCell.m; sourceTree = "<group>"; };
 		536369D2213CD13C003446DF /* LSPhotoSelectEnums.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSPhotoSelectEnums.h; sourceTree = "<group>"; };
+		536369D4213D315F003446DF /* NSIndexSet+LSAdd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSIndexSet+LSAdd.h"; sourceTree = "<group>"; };
+		536369D5213D315F003446DF /* NSIndexSet+LSAdd.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSIndexSet+LSAdd.m"; sourceTree = "<group>"; };
+		536369D7213D32D2003446DF /* LSCategory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSCategory.h; sourceTree = "<group>"; };
 		53A52D512137C0460061ECAD /* LSAssetCollectionListVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSAssetCollectionListVC.h; sourceTree = "<group>"; };
 		53A52D522137C0460061ECAD /* LSAssetCollectionListVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSAssetCollectionListVC.m; sourceTree = "<group>"; };
 		53A52D542137C05E0061ECAD /* LSAssetCollectionVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSAssetCollectionVC.h; sourceTree = "<group>"; };
@@ -158,7 +162,7 @@
 		53530E8921377CD90051D731 /* LSPhotoSelect */ = {
 			isa = PBXGroup;
 			children = (
-				53A52D612137E7E80061ECAD /* Authorization */,
+				536369D3213D3118003446DF /* Category */,
 				53A52D572137C09C0061ECAD /* PhotoBrowse */,
 				53A52D4D2137803B0061ECAD /* PhotoSelect */,
 				53530E8A21377CD90051D731 /* AppDelegate.h */,
@@ -191,6 +195,17 @@
 				53530EB021377CDC0051D731 /* Info.plist */,
 			);
 			path = LSPhotoSelectUITests;
+			sourceTree = "<group>";
+		};
+		536369D3213D3118003446DF /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				53A52D612137E7E80061ECAD /* Authorization */,
+				536369D4213D315F003446DF /* NSIndexSet+LSAdd.h */,
+				536369D5213D315F003446DF /* NSIndexSet+LSAdd.m */,
+				536369D7213D32D2003446DF /* LSCategory.h */,
+			);
+			path = Category;
 			sourceTree = "<group>";
 		};
 		53A52D4D2137803B0061ECAD /* PhotoSelect */ = {
@@ -480,6 +495,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				536369D6213D315F003446DF /* NSIndexSet+LSAdd.m in Sources */,
 				53A52D532137C0460061ECAD /* LSAssetCollectionListVC.m in Sources */,
 				53A52D602137C4130061ECAD /* LSPhotoSelectNavC.m in Sources */,
 				53536B162138D2BB005D6A0C /* LSAlbumModel.m in Sources */,

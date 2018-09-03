@@ -10,7 +10,8 @@
 #define LSPhotoSelect_h
 
 #import "LSPhotoSelectEnums.h"
-#import "UIViewController+LSAuthorization.h"
+
+#import "LSCategory.h"
 
 #import "LSPhotoSelectNavC.h"
 #import "LSAssetCollectionListVC.h"

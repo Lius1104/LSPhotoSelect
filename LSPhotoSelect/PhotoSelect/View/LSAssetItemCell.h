@@ -14,6 +14,8 @@
 
 @property (nonatomic, strong) UIImageView * coverImageView;
 
+@property (nonatomic, strong) UIImageView * livePhotoIcon;
+
 @property (nonatomic, strong) UIImage * normalImage;
 
 @property (nonatomic, strong) UIImage * selectedImage;

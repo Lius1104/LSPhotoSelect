@@ -16,6 +16,10 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
 
 @interface LSAssetCollectionListVC ()<UITableViewDelegate, UITableViewDataSource>
 
+@property (nonatomic, strong) PHCachingImageManager * manager;
+
+@property (nonatomic, strong) PHImageRequestOptions * options;
+
 @property (nonatomic, strong) UITableView * tableView;
 
 @property (nonatomic, strong) NSMutableArray <LSAlbumModel *>* albumSource;
@@ -111,6 +115,9 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
 - (void)getAllAssetCollections {
     // 监测权限，哈哈，不知道为什么今天很开心
     [self.albumSource removeAllObjects];
+//    PHFetchOptions * albumOptions = [[PHFetchOptions alloc] init];
+//    NSSortDescriptor * sortDes = [NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES];
+//    albumOptions.sortDescriptors = @[sortDes];
     PHFetchOptions * options = [[PHFetchOptions alloc] init];
     switch (_assetType) {
         case LSAssetTypeAll: {
@@ -170,11 +177,8 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
         return;
     }
     
-    PHCachingImageManager * manager = [[PHCachingImageManager alloc] init];
     PHAsset * asset = [fetchResult firstObject];
-//    PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
-//    options.synchronous = YES;//为了效果，我这里选择了同步 因为只获取一张照片，不会对界面产生很大的影响
-    [manager requestImageForAsset:asset targetSize:CGSizeMake(60, 60) contentMode:PHImageContentModeAspectFill options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+    [self.manager requestImageForAsset:asset targetSize:CGSizeMake(60, 60) contentMode:PHImageContentModeAspectFill options:self.options resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
         coverImageBlock(result);
     }];
 }
@@ -248,6 +252,23 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
         [self.view addSubview:_tableView];
     }
     return _tableView;
+}
+
+- (PHCachingImageManager *)manager {
+    if (!_manager) {
+        _manager = [[PHCachingImageManager alloc] init];
+    }
+    return _manager;
+}
+
+- (PHImageRequestOptions *)options {
+    if (!_options) {
+        _options = [[PHImageRequestOptions alloc] init];
+        _options.synchronous = YES;//为了效果，我这里选择了同步 因为只获取一张照片，不会对界面产生很大的影响
+        _options.resizeMode = PHImageRequestOptionsResizeModeFast;
+        _options.deliveryMode = PHImageRequestOptionsDeliveryModeFastFormat;
+    }
+    return _options;
 }
 
 @end
