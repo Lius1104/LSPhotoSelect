@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+//@class LSAssetItemCell;
+
+typedef void(^LSSelectSourceBlock)(NSString * clickLocalIdentifier);
+
 @interface LSAssetItemCell : UICollectionViewCell
 
 @property (nonatomic, copy) NSString * localIdentifier;
@@ -19,5 +23,9 @@
 @property (nonatomic, strong) UIImage * normalImage;
 
 @property (nonatomic, strong) UIImage * selectedImage;
+
+@property (nonatomic, assign, getter=canSelect) BOOL isSelectable;
+
+- (void)setUpSelectSourceBlock:(LSSelectSourceBlock)block;
 
 @end

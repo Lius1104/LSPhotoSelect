@@ -19,6 +19,12 @@
 
 @property (nonatomic, assign) CGFloat space;
 
+@property (nonatomic, assign) LSSortOrder sortOrder;
+
+@property (nonatomic, assign) NSUInteger maxSelectedCount;
+
+
+
 @end
 
 @implementation LSPhotoSelectNavC
@@ -29,7 +35,9 @@
     return navC;
 }
 
-- (instancetype)initWithAssetType:(LSAssetType)assetType lineItemCount:(NSInteger)lineItemCount sectionInset:(UIEdgeInsets)sectionInset space:(CGFloat)space {
+
+
+- (instancetype)initWithAssetType:(LSAssetType)assetType lineItemCount:(NSInteger)lineItemCount sectionInset:(UIEdgeInsets)sectionInset space:(CGFloat)space sortOrder:(LSSortOrder)sortOrder maxSelectedCount:(NSUInteger)maxSelectedCount {
     _assetType = assetType;
     _lineItemCount = lineItemCount;
     if (_lineItemCount == 0) {
@@ -37,7 +45,10 @@
     }
     _sectionInset = sectionInset;
     _space = space;
-    LSAssetCollectionListVC * listVC = [[LSAssetCollectionListVC alloc] initWithAssetType:_assetType lineItemCount:_lineItemCount sectionInset:_sectionInset space:_space];
+    _sortOrder = sortOrder;
+    _maxSelectedCount = maxSelectedCount;
+    
+    LSAssetCollectionListVC * listVC = [[LSAssetCollectionListVC alloc] initWithAssetType:_assetType lineItemCount:_lineItemCount sectionInset:_sectionInset space:_space sortOrder:_sortOrder maxSelectedCount:_maxSelectedCount];
     self = [super initWithRootViewController:listVC];
     if (self) {
     }

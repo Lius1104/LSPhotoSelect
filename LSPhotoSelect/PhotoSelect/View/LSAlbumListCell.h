@@ -16,4 +16,6 @@
 
 @property (nonatomic, strong) UIImageView * intoImageView;
 
+- (void)setUpCoverImage:(UIImage *)coverImage;
+
 @end

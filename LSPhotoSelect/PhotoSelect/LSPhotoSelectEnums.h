@@ -10,9 +10,15 @@
 #define LSPhotoSelectEnums_h
 
 typedef enum : NSUInteger {
+    LSAssetTypeNone,
     LSAssetTypeImages,
     LSAssetTypeVideos,
     LSAssetTypeAll,
 } LSAssetType;
+
+typedef enum : NSUInteger {
+    LSSortOrderAscending,
+    LSSortOrderDescending,
+} LSSortOrder;
 
 #endif /* LSPhotoSelectEnums_h */

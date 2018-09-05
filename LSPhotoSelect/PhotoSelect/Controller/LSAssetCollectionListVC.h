@@ -10,6 +10,6 @@
 
 @interface LSAssetCollectionListVC : UIViewController
 
-- (instancetype)initWithAssetType:(LSAssetType)assetType lineItemCount:(NSInteger)lineItemCount sectionInset:(UIEdgeInsets)sectionInset space:(CGFloat)space;
+- (instancetype)initWithAssetType:(LSAssetType)assetType lineItemCount:(NSInteger)lineItemCount sectionInset:(UIEdgeInsets)sectionInset space:(CGFloat)space sortOrder:(LSSortOrder)sortOrder maxSelectedCount:(NSUInteger)maxSelectedCount;
 
 @end

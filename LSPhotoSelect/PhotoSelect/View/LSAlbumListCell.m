@@ -76,4 +76,12 @@
     }];
 }
 
+- (void)setUpCoverImage:(UIImage *)coverImage {
+    if (coverImage) {
+        _coverImageView.image = coverImage;
+    } else {
+        _coverImageView.image = [UIImage imageNamed:@"default_cover"];
+    }
+}
+
 @end

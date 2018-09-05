@@ -38,11 +38,16 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
 
 @property (nonatomic, assign) CGFloat space;
 
+@property (nonatomic, assign) LSSortOrder sortOrder;
+
+@property (nonatomic, assign) NSUInteger maxSelectedCount;
+
+
 @end
 
 @implementation LSAssetCollectionListVC
 
-- (instancetype)initWithAssetType:(LSAssetType)assetType lineItemCount:(NSInteger)lineItemCount sectionInset:(UIEdgeInsets)sectionInset space:(CGFloat)space {
+- (instancetype)initWithAssetType:(LSAssetType)assetType lineItemCount:(NSInteger)lineItemCount sectionInset:(UIEdgeInsets)sectionInset space:(CGFloat)space sortOrder:(LSSortOrder)sortOrder maxSelectedCount:(NSUInteger)maxSelectedCount {
     self = [super init];
     if (self) {
         _assetType = assetType;
@@ -54,7 +59,13 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
         
         _sectionInset = sectionInset;
         _space = space < 0 ? 0 : space;
+        _sortOrder = sortOrder;
+        _maxSelectedCount = maxSelectedCount;
         
+        _albumSource = [NSMutableArray arrayWithCapacity:1];
+        
+        // 获取所有相册
+        [self getAllAssetCollections];
     }
     return self;
 }
@@ -67,6 +78,8 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
         _lineItemCount = 4;
         _space = 3;
         _sectionInset = UIEdgeInsetsMake(3, 3, 3, 3);
+        _sortOrder = LSSortOrderAscending;
+        _maxSelectedCount = 0;
         
         _albumSource = [NSMutableArray arrayWithCapacity:1];
         
@@ -126,13 +139,13 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
     // 监测权限，哈哈，不知道为什么今天很开心
     _smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
     _userAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeSmartAlbumUserLibrary options:nil];
-    
     [self updateAlbums];
 }
 
 - (void)updateAlbums {
     PHFetchOptions * options = [[PHFetchOptions alloc] init];
     switch (_assetType) {
+        case LSAssetTypeNone:
         case LSAssetTypeAll: {
             options.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld || mediaType == %ld", PHAssetMediaTypeImage, PHAssetMediaTypeVideo];
         }
@@ -150,29 +163,39 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
     [self.albumSource removeAllObjects];
     for (PHAssetCollection * assetCollection in _smartAlbums) {
         if (assetCollection.assetCollectionSubtype != PHAssetCollectionSubtypeSmartAlbumAllHidden) {
-            PHFetchResult * result = [PHAsset fetchAssetsInAssetCollection:assetCollection options:options];
             LSAlbumModel * album = [[LSAlbumModel alloc] init];
             album.assetCollection = assetCollection;
-            album.sourceCount = result.count;
+            if (assetCollection.estimatedAssetCount == NSNotFound) {
+                PHFetchResult * result = [PHAsset fetchAssetsInAssetCollection:assetCollection options:options];
+                album.sourceCount = result.count;
+            } else {
+                album.sourceCount = assetCollection.estimatedAssetCount;
+            }
             if (assetCollection.assetCollectionSubtype == PHAssetCollectionSubtypeSmartAlbumUserLibrary) {
                 _userLibrary = assetCollection;
                 [self.albumSource insertObject:album atIndex:0];
             } else {
                 [self.albumSource addObject:album];
             }
-            // 获取 相册封面
-            [self getAssetCollection:assetCollection coverImg:^(UIImage *coverImg) {
-                album.coverImg = coverImg;
-            }];
+            if (album.sourceCount > 0) {
+                // 获取 相册封面
+                [self getAssetCollection:assetCollection coverImg:^(UIImage *coverImg) {
+                    album.coverImg = coverImg;
+                }];
+            }
         }
     }
-    
     for (PHAssetCollection * assetCollection in _userAlbums) {
-        PHFetchResult * result = [PHAsset fetchAssetsInAssetCollection:assetCollection options:options];
-        if (result.count > 0) {
+        NSUInteger count = assetCollection.estimatedAssetCount;
+        if (count == NSNotFound) {
+            PHFetchResult * result = [PHAsset fetchAssetsInAssetCollection:assetCollection options:options];
+            count = result.count;
+        }
+        
+        if (count > 0) {
             LSAlbumModel * album = [[LSAlbumModel alloc] init];
             album.assetCollection = assetCollection;
-            album.sourceCount = result.count;
+            album.sourceCount = count;
             [self.albumSource addObject:album];
             // 获取 相册封面
             [self getAssetCollection:assetCollection coverImg:^(UIImage *coverImg) {
@@ -196,7 +219,7 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
 }
 
 - (void)jumpToAlbum:(PHAssetCollection *)assetCollection animated:(BOOL)animated {
-    LSAssetCollectionVC * assetVC = [[LSAssetCollectionVC alloc] initWithAssetCollection:assetCollection assetType:LSAssetTypeImages lineItemCount:4 sectionInset:UIEdgeInsetsMake(3, 3, 3, 3) space:3];
+    LSAssetCollectionVC * assetVC = [[LSAssetCollectionVC alloc] initWithAssetCollection:assetCollection assetType:_assetType lineItemCount:_lineItemCount sectionInset:_sectionInset space:_space sortOrder:_sortOrder maxSelectedCount:_maxSelectedCount];
     UIBarButtonItem * backItem = [[UIBarButtonItem alloc] init];
     backItem.title = @"返回";
     self.navigationItem.backBarButtonItem = backItem;
@@ -243,11 +266,11 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
     if (cell == nil) {
         cell = [[LSAlbumListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ls_assetCollectionList_cell"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//        cell.intoImageView.image = [UIImage imageNamed:@"into"];
+        cell.intoImageView.image = [UIImage imageNamed:@"into"];
     }
     
     LSAlbumModel * album = [self.albumSource objectAtIndex:indexPath.row];
-    cell.coverImageView.image = album.coverImg;
+    [cell setUpCoverImage:album.coverImg];
     NSMutableAttributedString * titleString = [[NSMutableAttributedString alloc] initWithString:album.assetCollection.localizedTitle attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:15], NSForegroundColorAttributeName: [UIColor blackColor]}];
     NSAttributedString * countString = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" (%d)", (int)album.sourceCount] attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:13], NSForegroundColorAttributeName: [UIColor lightGrayColor]}];
     [titleString appendAttributedString:countString];

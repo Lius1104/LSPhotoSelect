@@ -10,6 +10,13 @@
 
 @interface NSIndexSet (LSAdd)
 
-+ (NSArray<NSIndexPath *> *)indexPathsFromIndexSet:(NSIndexSet *)indexSet;
+/**
+ IndexSet转IndexPath
+
+ @param indexSet row set
+ @param section section number
+ @return NSIndexPath collection
+ */
++ (NSArray<NSIndexPath *> *)indexPathsFromIndexSet:(NSIndexSet *)indexSet AtSection:(NSUInteger)section;
 
 @end

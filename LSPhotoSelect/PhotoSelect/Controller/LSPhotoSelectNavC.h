@@ -33,8 +33,8 @@
  @param space item 之间的间距
  @return navigationController
  */
-- (instancetype)initWithAssetType:(LSAssetType)assetType lineItemCount:(NSInteger)lineItemCount sectionInset:(UIEdgeInsets)sectionInset space:(CGFloat)space;
+- (instancetype)initWithAssetType:(LSAssetType)assetType lineItemCount:(NSInteger)lineItemCount sectionInset:(UIEdgeInsets)sectionInset space:(CGFloat)space sortOrder:(LSSortOrder)sortOrder maxSelectedCount:(NSUInteger)maxSelectedCount;
 
-- (void)ls_presentPhotoSelectNavCFrom:(UIViewController *)fromVC;
+//- (void)ls_presentPhotoSelectNavCFrom:(UIViewController *)fromVC;
 
 @end

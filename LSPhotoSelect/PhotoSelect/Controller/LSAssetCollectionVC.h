@@ -15,6 +15,6 @@
 
 @property (nonatomic, assign, readonly) LSAssetType assetType;
 
-- (instancetype)initWithAssetCollection:(PHAssetCollection *)assetCollection assetType:(LSAssetType)assetType lineItemCount:(NSInteger)lineItemCount sectionInset:(UIEdgeInsets)sectionInset space:(CGFloat)space;
+- (instancetype)initWithAssetCollection:(PHAssetCollection *)assetCollection assetType:(LSAssetType)assetType lineItemCount:(NSInteger)lineItemCount sectionInset:(UIEdgeInsets)sectionInset space:(CGFloat)space sortOrder:(NSUInteger)sortOrder maxSelectedCount:(NSUInteger)maxSelectedCount;
 
 @end

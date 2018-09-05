@@ -10,10 +10,10 @@
 
 @implementation NSIndexSet (LSAdd)
 
-+ (NSArray<NSIndexPath *> *)indexPathsFromIndexSet:(NSIndexSet *)indexSet {
++ (NSArray<NSIndexPath *> *)indexPathsFromIndexSet:(NSIndexSet *)indexSet AtSection:(NSUInteger)section {
     NSMutableArray <NSIndexPath *>* indexPaths = [NSMutableArray arrayWithCapacity:1];
     [indexSet enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
-        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:idx inSection:0];
+        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:idx inSection:section];
         [indexPaths addObject:indexPath];
     }];
     return [indexPaths copy];

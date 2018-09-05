@@ -23,7 +23,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string> 是否允许app访问您的相册？请选择“是”，如果不不允许，您将不能使用xx功能。</string>
+	<string> 是否允许app访问您的相册？请选择“是”，如果不不允许，您将不能使用选择相册的功能。</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

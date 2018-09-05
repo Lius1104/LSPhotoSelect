@@ -25,11 +25,18 @@
 
 @property (nonatomic, assign, readonly) NSInteger lineItemCount;
 
-@property (nonatomic, assign) CGSize itemSize;
+@property (nonatomic, assign, readonly) CGSize itemSize;
 
-@property (nonatomic, assign) UIEdgeInsets sectionInset;
+@property (nonatomic, assign, readonly) UIEdgeInsets sectionInset;
 
-@property (nonatomic, assign) CGFloat itemSpace;
+@property (nonatomic, assign, readonly) CGFloat itemSpace;
+
+@property (nonatomic, assign, readonly) LSSortOrder sortOrder;
+
+@property (nonatomic, assign, readonly) NSUInteger maxSelectedCount;
+
+@property (nonatomic, strong) NSMutableArray <PHAsset *>* selectedSource;
+
 
 @end
 
@@ -40,7 +47,7 @@
     [[PHPhotoLibrary sharedPhotoLibrary] unregisterChangeObserver:self];
 }
 
-- (instancetype)initWithAssetCollection:(PHAssetCollection *)assetCollection assetType:(LSAssetType)assetType lineItemCount:(NSInteger)lineItemCount sectionInset:(UIEdgeInsets)sectionInset space:(CGFloat)space {
+- (instancetype)initWithAssetCollection:(PHAssetCollection *)assetCollection assetType:(LSAssetType)assetType lineItemCount:(NSInteger)lineItemCount sectionInset:(UIEdgeInsets)sectionInset space:(CGFloat)space sortOrder:(NSUInteger)sortOrder maxSelectedCount:(NSUInteger)maxSelectedCount {
     self = [super init];
     if (self) {
         _assetCollection = assetCollection;
@@ -58,6 +65,9 @@
         CGFloat availableWidth = CGRectGetWidth([UIScreen mainScreen].bounds) - _sectionInset.left - _sectionInset.right - (space * (lineItemCount - 1));
         CGFloat width = availableWidth / _lineItemCount;
         _itemSize = CGSizeMake(width, width);
+        
+        _sortOrder = sortOrder;
+        _maxSelectedCount = maxSelectedCount;
         
         _manager = [[PHCachingImageManager alloc] init];
         _options = [[PHImageRequestOptions alloc] init];
@@ -106,11 +116,13 @@
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     if (self.isNeedScroll == YES) {
-        if (_fetchResult.count > 0) {
-            [_collectionView reloadData];
-            NSInteger count = _fetchResult.count;
-            NSIndexPath * indexPath = [NSIndexPath indexPathForRow:(count - 1) inSection:0];
-            [_collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
+        if (_sortOrder == LSSortOrderAscending) {
+            if (_fetchResult.count > 0) {
+                [_collectionView reloadData];
+                NSInteger count = _fetchResult.count;
+                NSIndexPath * indexPath = [NSIndexPath indexPathForRow:(count - 1) inSection:0];
+                [_collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
+            }
         }
         self.isNeedScroll = NO;
     }
@@ -122,6 +134,10 @@
     }
     PHFetchOptions * options = [[PHFetchOptions alloc] init];
     switch (_assetType) {
+        case LSAssetTypeNone: {
+            options.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld || mediaType == %ld", PHAssetMediaTypeImage, PHAssetMediaTypeVideo];
+        }
+            break;
         case LSAssetTypeImages: {
             options.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld", PHAssetMediaTypeImage];
         }
@@ -135,7 +151,11 @@
         }
             break;
     }
+    BOOL isAscending = _sortOrder == LSSortOrderAscending ? YES : NO;
+    NSSortDescriptor * sort = [NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:isAscending];
+    options.sortDescriptors = @[sort];
     _fetchResult = [PHAsset fetchAssetsInAssetCollection:_assetCollection options:options];
+    self.title = [NSString stringWithFormat:@"%@(%d)", _assetCollection.localizedTitle, (int)_fetchResult.count];
 }
 
 - (void)resetCachedAssets {
@@ -223,6 +243,14 @@
     return assets;
 }
 
+- (void)addSource:(PHAsset *)asset {
+    [self.selectedSource addObject:asset];
+}
+
+- (void)removeSource:(PHAsset *)asset {
+    [self.selectedSource removeObject:asset];
+}
+
 #pragma mark - action
 - (void)handleBack {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -241,24 +269,25 @@
     }
     dispatch_sync(dispatch_get_main_queue(), ^{
         self.fetchResult = [changeDetail fetchResultAfterChanges];
+        self.title = [NSString stringWithFormat:@"%@(%d)", self.assetCollection.localizedTitle, (int)self.fetchResult.count];
         if (changeDetail.hasIncrementalChanges) {
             UICollectionView * collection = self.collectionView;
             if (collection) {
                 [collection performBatchUpdates:^{
                     NSIndexSet * removedIndexes = changeDetail.removedIndexes;
                     if (removedIndexes.count > 0) {
-                        NSArray <NSIndexPath *>* indexPaths = [NSIndexSet indexPathsFromIndexSet:removedIndexes];
+                        NSArray <NSIndexPath *>* indexPaths = [NSIndexSet indexPathsFromIndexSet:removedIndexes AtSection:0];
                         [collection deleteItemsAtIndexPaths:indexPaths];
                     }
                     NSIndexSet * insertIndexes = changeDetail.insertedIndexes;
                     if (insertIndexes.count > 0) {
-                        NSArray <NSIndexPath *>* indexPaths = [NSIndexSet indexPathsFromIndexSet:insertIndexes];
-                        [collection deleteItemsAtIndexPaths:indexPaths];
+                        NSArray <NSIndexPath *>* indexPaths = [NSIndexSet indexPathsFromIndexSet:insertIndexes AtSection:0];
+                        [collection insertItemsAtIndexPaths:indexPaths];
                     }
                     NSIndexSet * changedIndexes = changeDetail.changedIndexes;
                     if (changedIndexes.count > 0) {
-                        NSArray <NSIndexPath *>* indexPaths = [NSIndexSet indexPathsFromIndexSet:changedIndexes];
-                        [collection deleteItemsAtIndexPaths:indexPaths];
+                        NSArray <NSIndexPath *>* indexPaths = [NSIndexSet indexPathsFromIndexSet:changedIndexes AtSection:0];
+                        [collection reloadItemsAtIndexPaths:indexPaths];
                     }
                     [changeDetail enumerateMovesWithBlock:^(NSUInteger fromIndex, NSUInteger toIndex) {
                         [collection moveItemAtIndexPath:[NSIndexPath indexPathForItem:fromIndex inSection:0] toIndexPath:[NSIndexPath indexPathForItem:toIndex inSection:0]];
@@ -285,6 +314,7 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     LSAssetItemCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ls_assetItem_Cell" forIndexPath:indexPath];
+    [cell setIsSelectable:(_maxSelectedCount == 0 ? NO : YES)];
     if (indexPath.row < _fetchResult.count) {
         PHAsset * asset = [_fetchResult objectAtIndex:indexPath.row];
         if (@available(iOS 9.1, *)) {
@@ -302,6 +332,45 @@
                 cell.coverImageView.image = result;
             }
         }];
+        if (_maxSelectedCount > 0) {
+            [self.selectedSource enumerateObjectsUsingBlock:^(PHAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if ([obj.localIdentifier isEqualToString:asset.localIdentifier]) {
+                    cell.selected = YES;
+                } else {
+                    cell.selected = NO;
+                }
+            }];
+            
+            __weak typeof (cell) weakCell = cell;
+            [cell setUpSelectSourceBlock:^(NSString *clickLocalIdentifier) {
+                if ([self.selectedSource count] == 0) {
+                    weakCell.selected = YES;
+                    [self.selectedSource addObject:asset];
+                } else {
+                    __weak typeof(self) weakSelf = self;
+                    [self.selectedSource enumerateObjectsUsingBlock:^(PHAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                        if ([obj.localIdentifier isEqualToString:clickLocalIdentifier]) {
+                            weakCell.selected = NO;
+                            *stop = YES;
+                            // 从 数组中移除
+                            [weakSelf.selectedSource removeObject:obj];
+                        } else {
+                            // 判断 最大 数量
+                            if ([weakSelf.selectedSource count] < weakSelf.maxSelectedCount) {
+                                weakCell.selected = YES;
+                                *stop = YES;
+                                // 添加 到 数组
+                                [weakSelf.selectedSource addObject:asset];
+                            } else {
+                                NSLog(@"已经最大");
+                                weakCell.selected = NO;
+                                *stop = YES;
+                            }
+                        }
+                    }];
+                }
+            }];
+        }
     }
     return cell;
 }
@@ -322,6 +391,13 @@
         [self.view addSubview:_collectionView];
     }
     return _collectionView;
+}
+
+- (NSMutableArray *)selectedSource {
+    if (!_selectedSource) {
+        _selectedSource = [NSMutableArray arrayWithCapacity:1];
+    }
+    return _selectedSource;
 }
 
 @end
