@@ -24,6 +24,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
+        _sourceSelected = NO;
         _coverImageView = [[UIImageView alloc] init];
         _coverImageView.contentMode = UIViewContentModeScaleAspectFill;
         _coverImageView.clipsToBounds = YES;
@@ -70,7 +71,11 @@
 
 - (void)setSelected:(BOOL)selected {
     [super setSelected:selected];
-    _normalButton.selected = self.isSelected;
+}
+
+- (void)setSourceSelected:(BOOL)sourceSelected {
+    _sourceSelected = sourceSelected;
+    _normalButton.selected = _sourceSelected;
 }
 
 - (void)setIsSelectable:(BOOL)isSelectable {

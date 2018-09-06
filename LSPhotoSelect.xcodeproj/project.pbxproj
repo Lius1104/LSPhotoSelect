@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1B11BC066B221BD1FA3D30B4 /* libPods-LSPhotoSelectTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 06E67A0BC68F267A7D9E2DFE /* libPods-LSPhotoSelectTests.a */; };
+		5321500C2140DB61006C058E /* LSAssetCollectionToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 5321500B2140DB61006C058E /* LSAssetCollectionToolBar.m */; };
 		53530E8C21377CD90051D731 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 53530E8B21377CD90051D731 /* AppDelegate.m */; };
 		53530E8F21377CD90051D731 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53530E8E21377CD90051D731 /* ViewController.m */; };
 		53530E9221377CD90051D731 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 53530E9021377CD90051D731 /* Main.storyboard */; };
@@ -48,6 +49,8 @@
 /* Begin PBXFileReference section */
 		06E67A0BC68F267A7D9E2DFE /* libPods-LSPhotoSelectTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LSPhotoSelectTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FD9EEEE95148A83BC6D17ED /* Pods-LSPhotoSelect.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LSPhotoSelect.release.xcconfig"; path = "Pods/Target Support Files/Pods-LSPhotoSelect/Pods-LSPhotoSelect.release.xcconfig"; sourceTree = "<group>"; };
+		5321500A2140DB61006C058E /* LSAssetCollectionToolBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSAssetCollectionToolBar.h; sourceTree = "<group>"; };
+		5321500B2140DB61006C058E /* LSAssetCollectionToolBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSAssetCollectionToolBar.m; sourceTree = "<group>"; };
 		53530E8721377CD90051D731 /* LSPhotoSelect.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LSPhotoSelect.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		53530E8A21377CD90051D731 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		53530E8B21377CD90051D731 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -240,6 +243,8 @@
 				53536B182138D5C3005D6A0C /* LSAlbumListCell.m */,
 				53536B1C213920E7005D6A0C /* LSAssetItemCell.h */,
 				53536B1D213920E7005D6A0C /* LSAssetItemCell.m */,
+				5321500A2140DB61006C058E /* LSAssetCollectionToolBar.h */,
+				5321500B2140DB61006C058E /* LSAssetCollectionToolBar.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -498,6 +503,7 @@
 				536369D6213D315F003446DF /* NSIndexSet+LSAdd.m in Sources */,
 				53A52D532137C0460061ECAD /* LSAssetCollectionListVC.m in Sources */,
 				53A52D602137C4130061ECAD /* LSPhotoSelectNavC.m in Sources */,
+				5321500C2140DB61006C058E /* LSAssetCollectionToolBar.m in Sources */,
 				53536B162138D2BB005D6A0C /* LSAlbumModel.m in Sources */,
 				53A52D652137E8B90061ECAD /* UIViewController+LSAuthorization.m in Sources */,
 				53530E8F21377CD90051D731 /* ViewController.m in Sources */,

@@ -24,6 +24,9 @@ typedef void(^LSSelectSourceBlock)(NSString * clickLocalIdentifier);
 
 @property (nonatomic, strong) UIImage * selectedImage;
 
+@property (nonatomic, assign) BOOL sourceSelected;
+
+
 @property (nonatomic, assign, getter=canSelect) BOOL isSelectable;
 
 - (void)setUpSelectSourceBlock:(LSSelectSourceBlock)block;

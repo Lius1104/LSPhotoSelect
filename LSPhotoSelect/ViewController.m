@@ -37,6 +37,7 @@
 }
 
 - (IBAction)handleJumpToSelectPhoto:(id)sender {
+    [self.view endEditing:YES];
     // 获取用户数据
     UIEdgeInsets sectionInset = UIEdgeInsetsZero;
     if ([self.leftTF.text length] != 0) {
@@ -86,8 +87,10 @@
                 break;
             case PHAuthorizationStatusAuthorized: {
 //                [self presentViewController:[LSPhotoSelectNavC ls_defaultPhotoSelectNavC] animated:YES completion:nil];
-                LSPhotoSelectNavC *nav = [[LSPhotoSelectNavC alloc] initWithAssetType:assetType lineItemCount:itemOfLineCount sectionInset:sectionInset space:itemSpace sortOrder:sortOrder maxSelectedCount:maxSelectedCount];
-                [self presentViewController:nav animated:YES completion:nil];
+//                dispatch_async(dispatch_get_main_queue(), ^{
+                    LSPhotoSelectNavC *nav = [[LSPhotoSelectNavC alloc] initWithAssetType:assetType lineItemCount:itemOfLineCount sectionInset:sectionInset space:itemSpace sortOrder:sortOrder maxSelectedCount:maxSelectedCount];
+                    [self presentViewController:nav animated:YES completion:nil];
+//                });
             }
                 break;
             case PHAuthorizationStatusNotDetermined: {

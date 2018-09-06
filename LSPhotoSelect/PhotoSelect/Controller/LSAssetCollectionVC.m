@@ -8,14 +8,17 @@
 
 #import "LSAssetCollectionVC.h"
 #import "LSAssetItemCell.h"
+#import "LSAssetCollectionToolBar.h"
 
-@interface LSAssetCollectionVC ()<UICollectionViewDelegate, UICollectionViewDataSource, PHPhotoLibraryChangeObserver> {
+@interface LSAssetCollectionVC ()<UICollectionViewDelegate, UICollectionViewDataSource, PHPhotoLibraryChangeObserver, LSAssetCollectionToolBarDelegate> {
     CGRect previousPreheatRect;
 }
 
 @property (nonatomic, assign) BOOL isNeedScroll;
 
 @property (nonatomic, strong) UICollectionView * collectionView;
+
+@property (nonatomic, strong) LSAssetCollectionToolBar * toolBar;
 
 @property (nonatomic, strong) PHCachingImageManager * manager;
 
@@ -88,12 +91,28 @@
     
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.top.right.equalTo(self.view);
-        if (@available(iOS 11.0, *)) {
-            make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
+        if (self.maxSelectedCount == 0) {
+            if (@available(iOS 11.0, *)) {
+                make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
+            } else {
+                make.bottom.equalTo(self.view.mas_bottom);
+            }
         } else {
-            make.bottom.equalTo(self.view.mas_bottom);
+            make.bottom.equalTo(self.toolBar.mas_top);
         }
     }];
+    if (_toolBar) {
+        [_toolBar mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(self.view);
+            make.top.equalTo(self.collectionView.mas_bottom);
+            make.height.mas_equalTo(self.toolBar.bounds.size.height);
+            if (@available(iOS 11.0, *)) {
+                make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
+            } else {
+                make.bottom.equalTo(self.view.mas_bottom);
+            }
+        }];
+    }
     
     [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
     
@@ -335,35 +354,43 @@
         if (_maxSelectedCount > 0) {
             [self.selectedSource enumerateObjectsUsingBlock:^(PHAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 if ([obj.localIdentifier isEqualToString:asset.localIdentifier]) {
-                    cell.selected = YES;
+                    cell.sourceSelected = YES;
                 } else {
-                    cell.selected = NO;
+                    cell.sourceSelected = NO;
                 }
             }];
             
             __weak typeof (cell) weakCell = cell;
             [cell setUpSelectSourceBlock:^(NSString *clickLocalIdentifier) {
                 if ([self.selectedSource count] == 0) {
-                    weakCell.selected = YES;
+                    weakCell.sourceSelected = YES;
                     [self.selectedSource addObject:asset];
                 } else {
                     __weak typeof(self) weakSelf = self;
                     [self.selectedSource enumerateObjectsUsingBlock:^(PHAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                         if ([obj.localIdentifier isEqualToString:clickLocalIdentifier]) {
-                            weakCell.selected = NO;
+                            weakCell.sourceSelected = NO;
                             *stop = YES;
                             // 从 数组中移除
                             [weakSelf.selectedSource removeObject:obj];
+                            [weakSelf.toolBar configSourceCount:weakSelf.selectedSource.count];
                         } else {
                             // 判断 最大 数量
                             if ([weakSelf.selectedSource count] < weakSelf.maxSelectedCount) {
-                                weakCell.selected = YES;
+                                weakCell.sourceSelected = YES;
                                 *stop = YES;
                                 // 添加 到 数组
                                 [weakSelf.selectedSource addObject:asset];
+                                [weakSelf.toolBar configSourceCount:weakSelf.selectedSource.count];
                             } else {
                                 NSLog(@"已经最大");
-                                weakCell.selected = NO;
+                                NSString * msgString = [NSString stringWithFormat:@"最多只能选择%d个资源", (int)weakSelf.maxSelectedCount];
+                                UIAlertController * alertC = [UIAlertController alertControllerWithTitle:@"提示" message:msgString preferredStyle:UIAlertControllerStyleAlert];
+                                UIAlertAction * doneAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                                }];
+                                [alertC addAction:doneAction];
+                                [weakSelf presentViewController:alertC animated:YES completion:nil];
+                                weakCell.sourceSelected = NO;
                                 *stop = YES;
                             }
                         }
@@ -373,6 +400,30 @@
         }
     }
     return cell;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    // 跳转到 图片浏览
+    NSUInteger currentIndex = indexPath.row;
+    //
+}
+
+#pragma mark - LSAssetCollectionToolBarDelegate
+- (void)ls_assetCollectionToolBarDidClickPreviewButton {
+    // 跳转到 图片浏览
+    NSUInteger currentIndex = 0;
+}
+
+- (void)ls_assetCollectionToolBarDidClickOriginalButton:(UIButton *)originalButton {
+    if (originalButton.isSelected) {
+        // 选中原图
+    } else {
+        // 未选中原图
+    }
+}
+
+- (void)ls_assetCollectionToolBarDidClickDoneButton {
+    // 选择完毕 返回
 }
 
 #pragma mark - getter or setter
@@ -391,6 +442,19 @@
         [self.view addSubview:_collectionView];
     }
     return _collectionView;
+}
+
+- (LSAssetCollectionToolBar *)toolBar {
+    if (!_toolBar) {
+        BOOL isShowOriginal = YES;
+        if (_assetType == LSAssetTypeVideos) {
+            isShowOriginal = NO;
+        }
+        _toolBar = [LSAssetCollectionToolBar ls_assetCollectionToolBarWithShowCount:YES showOriginal:isShowOriginal];
+        _toolBar.delegate = self;
+        [self.view addSubview:_toolBar];
+    }
+    return _toolBar;
 }
 
 - (NSMutableArray *)selectedSource {
