@@ -336,6 +336,11 @@
     [cell setIsSelectable:(_maxSelectedCount == 0 ? NO : YES)];
     if (indexPath.row < _fetchResult.count) {
         PHAsset * asset = [_fetchResult objectAtIndex:indexPath.row];
+        if (asset.mediaType == PHAssetMediaTypeVideo) {
+            cell.playButton.hidden = NO;
+        } else {
+            cell.playButton.hidden = YES;
+        }
         if (@available(iOS 9.1, *)) {
             if (asset.mediaSubtypes == PHAssetMediaSubtypePhotoLive) {
                 cell.livePhotoIcon.image = [PHLivePhotoView livePhotoBadgeImageWithOptions:PHLivePhotoBadgeOptionsOverContent];
@@ -365,36 +370,39 @@
                 if ([self.selectedSource count] == 0) {
                     weakCell.sourceSelected = YES;
                     [self.selectedSource addObject:asset];
+                    [self.toolBar configSourceCount:self.selectedSource.count];
                 } else {
                     __weak typeof(self) weakSelf = self;
+                    __block BOOL containSource = NO;
                     [self.selectedSource enumerateObjectsUsingBlock:^(PHAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                         if ([obj.localIdentifier isEqualToString:clickLocalIdentifier]) {
                             weakCell.sourceSelected = NO;
+                            containSource = YES;
                             *stop = YES;
-                            // 从 数组中移除
-                            [weakSelf.selectedSource removeObject:obj];
-                            [weakSelf.toolBar configSourceCount:weakSelf.selectedSource.count];
-                        } else {
-                            // 判断 最大 数量
-                            if ([weakSelf.selectedSource count] < weakSelf.maxSelectedCount) {
-                                weakCell.sourceSelected = YES;
-                                *stop = YES;
-                                // 添加 到 数组
-                                [weakSelf.selectedSource addObject:asset];
-                                [weakSelf.toolBar configSourceCount:weakSelf.selectedSource.count];
-                            } else {
-                                NSLog(@"已经最大");
-                                NSString * msgString = [NSString stringWithFormat:@"最多只能选择%d个资源", (int)weakSelf.maxSelectedCount];
-                                UIAlertController * alertC = [UIAlertController alertControllerWithTitle:@"提示" message:msgString preferredStyle:UIAlertControllerStyleAlert];
-                                UIAlertAction * doneAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                                }];
-                                [alertC addAction:doneAction];
-                                [weakSelf presentViewController:alertC animated:YES completion:nil];
-                                weakCell.sourceSelected = NO;
-                                *stop = YES;
-                            }
                         }
                     }];
+                    if (containSource) {
+                        // 从 数组中移除
+                        [self.selectedSource removeObject:asset];
+                        [self.toolBar configSourceCount:self.selectedSource.count];
+                    } else {
+                        // 判断 最大 数量
+                        if ([self.selectedSource count] < self.maxSelectedCount) {
+                            weakCell.sourceSelected = YES;
+                            // 添加 到 数组
+                            [self.selectedSource addObject:asset];
+                            [self.toolBar configSourceCount:self.selectedSource.count];
+                        } else {
+                            NSLog(@"已经最大");
+                            NSString * msgString = [NSString stringWithFormat:@"最多只能选择%d个资源", (int)weakSelf.maxSelectedCount];
+                            UIAlertController * alertC = [UIAlertController alertControllerWithTitle:@"提示" message:msgString preferredStyle:UIAlertControllerStyleAlert];
+                            UIAlertAction * doneAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                            }];
+                            [alertC addAction:doneAction];
+                            [self presentViewController:alertC animated:YES completion:nil];
+                            weakCell.sourceSelected = NO;
+                        }
+                    }
                 }
             }];
         }

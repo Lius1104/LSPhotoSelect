@@ -20,6 +20,8 @@ typedef void(^LSSelectSourceBlock)(NSString * clickLocalIdentifier);
 
 @property (nonatomic, strong) UIImageView * livePhotoIcon;
 
+@property (nonatomic, strong) UIButton * playButton;
+
 @property (nonatomic, strong) UIImage * normalImage;
 
 @property (nonatomic, strong) UIImage * selectedImage;

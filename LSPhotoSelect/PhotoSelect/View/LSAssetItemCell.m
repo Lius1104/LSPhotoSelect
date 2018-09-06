@@ -40,6 +40,11 @@
         [_normalButton addTarget:self action:@selector(handleClickNormalButton:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_normalButton];
         
+        _playButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_playButton setImage:[UIImage imageNamed:@"video"] forState:UIControlStateNormal];
+        _playButton.hidden = YES;
+        [self addSubview:_playButton];
+        
 //        _selectedButton = [UIButton buttonWithType:UIButtonTypeCustom];
 //        [self addSubview:_selectedButton];
         
@@ -67,6 +72,12 @@
 //        make.top.right.equalTo(self);
 //        make.size.mas_equalTo(CGSizeMake(30, 30));
 //    }];
+    
+    [_playButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(30, 30));
+        make.right.equalTo(self.normalButton.mas_right);
+        make.bottom.equalTo(self);
+    }];
 }
 
 - (void)setSelected:(BOOL)selected {
