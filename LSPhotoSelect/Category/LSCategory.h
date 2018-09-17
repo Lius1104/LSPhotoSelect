@@ -11,6 +11,7 @@
 
 #import "NSIndexSet+LSAdd.h"
 
+#import "NSObject+LSAuthorization.h"
 #import "UIViewController+LSAuthorization.h"
 
 #endif /* LSCategory_h */

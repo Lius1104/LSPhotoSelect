@@ -11,53 +11,46 @@
 @implementation UIViewController (LSAuthorization)
 
 - (void)judgeAppPhotoLibraryUsageAuth:(PhotoLibraryUsageAuthBlock)authBlock {
-    PHAuthorizationStatus oldStatus = [PHPhotoLibrary authorizationStatus];
-    switch (oldStatus) {
-        case PHAuthorizationStatusNotDetermined: {
-            [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
-                if (status == PHAuthorizationStatusAuthorized) {
-                    // 允许访问
-                    authBlock(PHAuthorizationStatusAuthorized);
-                } else {
-                    // 拒绝访问
-                    authBlock(PHAuthorizationStatusDenied);
-                }
-            }];
-        }
-            break;
-        case PHAuthorizationStatusRestricted: {
-            UIAlertController * alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"访问受限" preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction * cancelAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                //  访问受限
-                authBlock(PHAuthorizationStatusRestricted);
-            }];
-            [alertC addAction:cancelAction];
-            [self presentViewController:alertC animated:YES completion:nil];
-        }
-            break;
-        case PHAuthorizationStatusDenied: {
-            UIAlertController * alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"当前您拒绝app访问相册，如需访问请点击\"前往\"打开权限" preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction * cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                //  用户 拒绝打开相册权限
+    [NSObject judgeAppPhotoLibraryUsageAuth:^(PHAuthorizationStatus status) {
+        switch (status) {
+            case PHAuthorizationStatusNotDetermined: {
                 authBlock(PHAuthorizationStatusDenied);
-            }];
-            UIAlertAction * doneAction = [UIAlertAction actionWithTitle:@"前往" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                // 跳转到设置
-                NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                if ([[UIApplication sharedApplication] canOpenURL:url]) {
-                    [[UIApplication sharedApplication] openURL:url];
-                }
-            }];
-            [alertC addAction:doneAction];
-            [alertC addAction:cancelAction];
-            [self presentViewController:alertC animated:YES completion:nil];
+            }
+                break;
+            case PHAuthorizationStatusRestricted: {
+                UIAlertController * alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"访问受限" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction * cancelAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    //  访问受限
+                    authBlock(PHAuthorizationStatusRestricted);
+                }];
+                [alertC addAction:cancelAction];
+                [self presentViewController:alertC animated:YES completion:nil];
+            }
+                break;
+            case PHAuthorizationStatusDenied: {
+                UIAlertController * alertC = [UIAlertController alertControllerWithTitle:@"提示" message:@"当前您拒绝app访问相册，如需访问请点击\"前往\"打开权限" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction * cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    //  用户 拒绝打开相册权限
+                    authBlock(PHAuthorizationStatusDenied);
+                }];
+                UIAlertAction * doneAction = [UIAlertAction actionWithTitle:@"前往" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    // 跳转到设置
+                    NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                    if ([[UIApplication sharedApplication] canOpenURL:url]) {
+                        [[UIApplication sharedApplication] openURL:url];
+                    }
+                }];
+                [alertC addAction:doneAction];
+                [alertC addAction:cancelAction];
+                [self presentViewController:alertC animated:YES completion:nil];
+            }
+                break;
+            case PHAuthorizationStatusAuthorized: {
+                authBlock(PHAuthorizationStatusAuthorized);
+            }
+                break;
         }
-            break;
-        case PHAuthorizationStatusAuthorized: {
-            authBlock(PHAuthorizationStatusAuthorized);
-        }
-            break;
-    }
+    }];
 }
 
 @end
