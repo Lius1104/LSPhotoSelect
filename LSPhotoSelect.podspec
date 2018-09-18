@@ -27,11 +27,12 @@ Pod::Spec.new do |s|
   s.author           = { 'Lius' => '15093319898@163.com' }
   s.source           = { :git => 'https://github.com/Lius1104/LSPhotoSelect.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
-  s.resources          = 'LSPhotoSelect/Assets.xcassets/*'
-  
+
   s.ios.deployment_target = '8.0'
   s.requires_arc = true # 是否启用ARC
-  s.source_files = 'LSPhotoSelect/**/*'
+  s.source_files = 'LSPhotoSelect/LSPhotoSelector.h'
+  s.public_header_files = 'LSPhotoSelect/LSPhotoSelector.h'
+  # s.source_files = 'AFNetworking/AFNetworking.h'
   
   # s.resource_bundles = {
     # 'LSPhotoSelect' => ['LSPhotoSelect/Assets.xcassets/*']
