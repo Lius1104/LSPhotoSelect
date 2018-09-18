@@ -87,7 +87,7 @@
 		53A52D552137C05E0061ECAD /* LSAssetCollectionVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSAssetCollectionVC.m; sourceTree = "<group>"; };
 		53A52D5B2137C11C0061ECAD /* LSPhotoBrowse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSPhotoBrowse.h; sourceTree = "<group>"; };
 		53A52D5C2137C12F0061ECAD /* LSPhotoSelect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSPhotoSelect.h; sourceTree = "<group>"; };
-		53A52D5D2137C1AF0061ECAD /* LSPrefixHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSPrefixHeader.h; sourceTree = "<group>"; };
+		53A52D5D2137C1AF0061ECAD /* LSPhotoSelector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSPhotoSelector.h; sourceTree = "<group>"; };
 		53A52D5E2137C4130061ECAD /* LSPhotoSelectNavC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSPhotoSelectNavC.h; sourceTree = "<group>"; };
 		53A52D5F2137C4130061ECAD /* LSPhotoSelectNavC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSPhotoSelectNavC.m; sourceTree = "<group>"; };
 		53A52D632137E8B90061ECAD /* UIViewController+LSAuthorization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+LSAuthorization.h"; sourceTree = "<group>"; };
@@ -184,7 +184,7 @@
 				53530E9521377CDC0051D731 /* LaunchScreen.storyboard */,
 				53530E9821377CDC0051D731 /* Info.plist */,
 				53530E9921377CDC0051D731 /* main.m */,
-				53A52D5D2137C1AF0061ECAD /* LSPrefixHeader.h */,
+				53A52D5D2137C1AF0061ECAD /* LSPhotoSelector.h */,
 			);
 			path = LSPhotoSelect;
 			sourceTree = "<group>";
@@ -707,7 +707,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5C6T98C8KA;
-				GCC_PREFIX_HEADER = "$(SRCROOT)/LSPhotoSelect/LSPrefixHeader.h";
+				GCC_PREFIX_HEADER = /Users/lius/Documents/GitHub/LSPhotoSelect/LSPhotoSelect/LSPhotoSelector.h;
 				INFOPLIST_FILE = LSPhotoSelect/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -727,7 +727,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5C6T98C8KA;
-				GCC_PREFIX_HEADER = "$(SRCROOT)/LSPhotoSelect/LSPrefixHeader.h";
+				GCC_PREFIX_HEADER = /Users/lius/Documents/GitHub/LSPhotoSelect/LSPhotoSelect/LSPhotoSelector.h;
 				INFOPLIST_FILE = LSPhotoSelect/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
