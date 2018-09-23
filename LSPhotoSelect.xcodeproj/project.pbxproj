@@ -146,6 +146,17 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		5335299D2157370500E80558 /* LSPhotoSelect */ = {
+			isa = PBXGroup;
+			children = (
+				53B44C9D214F4FA300ECA86D /* SaveToAlbum */,
+				536369D3213D3118003446DF /* Category */,
+				53A52D572137C09C0061ECAD /* PhotoBrowse */,
+				53A52D4D2137803B0061ECAD /* PhotoSelect */,
+			);
+			path = LSPhotoSelect;
+			sourceTree = "<group>";
+		};
 		53530E7E21377CD90051D731 = {
 			isa = PBXGroup;
 			children = (
@@ -171,10 +182,7 @@
 		53530E8921377CD90051D731 /* LSPhotoSelect */ = {
 			isa = PBXGroup;
 			children = (
-				53B44C9D214F4FA300ECA86D /* SaveToAlbum */,
-				536369D3213D3118003446DF /* Category */,
-				53A52D572137C09C0061ECAD /* PhotoBrowse */,
-				53A52D4D2137803B0061ECAD /* PhotoSelect */,
+				5335299D2157370500E80558 /* LSPhotoSelect */,
 				53530E8A21377CD90051D731 /* AppDelegate.h */,
 				53530E8B21377CD90051D731 /* AppDelegate.m */,
 				53530E8D21377CD90051D731 /* ViewController.h */,
