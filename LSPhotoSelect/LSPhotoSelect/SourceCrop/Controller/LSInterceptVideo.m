@@ -50,7 +50,7 @@
     
     [self configSubivews];
     
-    [self.view.layer addSublayer:self.playerLayer];
+    [self.playerView.layer addSublayer:self.playerLayer];
     
     [self.view layoutIfNeeded];
     CGRect bounds = self.playerView.bounds;
@@ -169,7 +169,7 @@
     if (!_playerView) {
         _playerView = [[UIView alloc] init];
         _playerView.contentMode = UIViewContentModeScaleAspectFit;
-        _playerView.clipsToBounds = YES;
+        _playerView.layer.masksToBounds = YES;
         [self.view addSubview:_playerView];
     }
     return _playerView;
@@ -187,6 +187,8 @@
 - (AVPlayerLayer *)playerLayer {
     if (!_playerLayer) {
         _playerLayer = [[AVPlayerLayer alloc] init];
+        _playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
+        _playerLayer.backgroundColor = [UIColor whiteColor].CGColor;
     }
     return _playerLayer;
 }

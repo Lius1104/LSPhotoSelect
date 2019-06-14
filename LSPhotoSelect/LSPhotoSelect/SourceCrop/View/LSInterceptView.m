@@ -7,6 +7,7 @@
 //
 
 #import "LSInterceptView.h"
+#import <objc/runtime.h>
 #import "LSVideoFrameCell.h"
 
 @interface LSInterceptView ()<UICollectionViewDelegate, UICollectionViewDataSource>
@@ -21,7 +22,14 @@
 @property (nonatomic, assign) NSUInteger duration;
 
 @property (nonatomic, strong) AVAssetImageGenerator * generator;
-@property (nonatomic, strong) NSMutableArray * imageSource;
+
+@property (nonatomic, strong) NSOperationQueue *queue;
+@property (nonatomic, strong) NSMutableDictionary <NSString *, UIImage *> * imageCache;
+@property (nonatomic, strong) NSMutableDictionary <NSString *, NSBlockOperation *> * opCache;
+
+@property (nonatomic, assign) CGFloat timeUnit;
+@property (nonatomic, assign) int imageCount;
+
 
 @property (nonatomic, strong) UICollectionView * collection;
 
@@ -76,39 +84,94 @@
 }
 
 - (void)configImageSource {
-    CGFloat timeUnit = 15 * 1.0f / 10;
-    int count = _duration / timeUnit;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        for (int i = 0; i < count; i++) {
-            CMTime item = CMTimeMake(timeUnit * i * self->_asset.duration.timescale, self->_asset.duration.timescale);
-            NSError * err = nil;
-            CGImageRef imageRef = [self->_generator copyCGImageAtTime:item actualTime:NULL error:&err];
-            if (imageRef == nil || err) {
-                continue;
-            }
-            UIImage * frameImage = imageRef ? [UIImage imageWithCGImage:imageRef] : nil;
-            CGImageRelease(imageRef);
-            if (frameImage == nil) {
-                continue;
-            }
-            [self.imageSource addObject:frameImage];
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.collection reloadData];
-        });
-    });
+    _timeUnit = 15 * 1.0f / 7.5;
+    _imageCount = _duration / _timeUnit;
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        for (int i = 0; i < count; i++) {
+//            CMTime item = CMTimeMake(timeUnit * i * self->_asset.duration.timescale, self->_asset.duration.timescale);
+//            NSError * err = nil;
+//            CGImageRef imageRef = [self->_generator copyCGImageAtTime:item actualTime:NULL error:&err];
+//            if (imageRef == nil || err) {
+//                continue;
+//            }
+//            UIImage * frameImage = imageRef ? [UIImage imageWithCGImage:imageRef] : nil;
+//            CGImageRelease(imageRef);
+//            if (frameImage == nil) {
+//                continue;
+//            }
+//            [self.imageSource addObject:frameImage];
+//        }
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [self.collection reloadData];
+//        });
+//    });
+    [self.collection reloadData];
 }
 
 #pragma mark - UICollectionViewDelegate, UICollectionViewDataSource
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.imageSource.count;
+    return self.imageCount;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     LSVideoFrameCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"LSVideoFrameCell" forIndexPath:indexPath];
-    cell.imageView.image = [self.imageSource objectAtIndex:indexPath.row];
+    cell.imageView.image = self.imageCache[@(indexPath.row).stringValue];
     return cell;
 }
+
+static const char _ZLOperationCellKey;
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (!_asset) return;
+    
+    if (_imageCache[@(indexPath.row).stringValue] || _opCache[@(indexPath.row).stringValue]) {
+        return;
+    }
+    
+    NSBlockOperation *op = [NSBlockOperation blockOperationWithBlock:^{
+        NSInteger row = indexPath.row;
+//        NSInteger i = row  * self->_timeUnit;
+        
+        CMTime time = CMTimeMake(row  * self->_timeUnit * self->_asset.duration.timescale, self->_asset.duration.timescale);
+        
+        NSError *error = nil;
+        CGImageRef cgImg = [self.generator copyCGImageAtTime:time actualTime:NULL error:&error];
+        if (!error && cgImg) {
+            UIImage *image = [UIImage imageWithCGImage:cgImg];
+            CGImageRelease(cgImg);
+            
+            [self->_imageCache setValue:image forKey:@(row).stringValue];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                NSIndexPath *nowIndexPath = [collectionView indexPathForCell:cell];
+                if (row == nowIndexPath.row) {
+                    [(LSVideoFrameCell *)cell imageView].image = image;
+                } else {
+                    UIImage *cacheImage = self->_imageCache[@(nowIndexPath.row).stringValue];
+                    if (cacheImage) {
+                        [(LSVideoFrameCell *)cell imageView].image = cacheImage;
+                    }
+                }
+            });
+            [self->_opCache removeObjectForKey:@(row).stringValue];
+        }
+        objc_removeAssociatedObjects(cell);
+    }];
+    [self.queue addOperation:op];
+    [self.opCache setValue:op forKey:@(indexPath.row).stringValue];
+    
+    objc_setAssociatedObject(cell, &_ZLOperationCellKey, op, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSBlockOperation *op = objc_getAssociatedObject(cell, &_ZLOperationCellKey);
+    if (op) {
+        [op cancel];
+        objc_removeAssociatedObjects(cell);
+        [_opCache removeObjectForKey:@(indexPath.row).stringValue];
+    }
+}
+
 
 #pragma mark - getter or setter
 - (UICollectionView *)collection {
@@ -130,11 +193,26 @@
     return _collection;
 }
 
-- (NSMutableArray *)imageSource {
-    if (!_imageSource) {
-        _imageSource = [NSMutableArray arrayWithCapacity:1];
+- (NSOperationQueue *)queue {
+    if (!_queue) {
+        _queue = [[NSOperationQueue alloc] init];
+        _queue.maxConcurrentOperationCount = 3;
     }
-    return _imageSource;
+    return _queue;
+}
+
+- (NSMutableDictionary<NSString *,UIImage *> *)imageCache {
+    if (!_imageCache) {
+        _imageCache = [[NSMutableDictionary alloc] initWithCapacity:1];
+    }
+    return _imageCache;
+}
+
+- (NSMutableDictionary<NSString *,NSBlockOperation *> *)opCache {
+    if (!_opCache) {
+        _opCache = [[NSMutableDictionary alloc] init];
+    }
+    return _opCache;
 }
 
 @end
