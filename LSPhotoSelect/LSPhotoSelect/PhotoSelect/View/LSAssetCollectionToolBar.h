@@ -12,6 +12,8 @@
 
 - (void)ls_assetCollectionToolBarDidClickPreviewButton;
 
+- (void)ls_assetCollectionToolBarDidClickCropButton;
+
 - (void)ls_assetCollectionToolBarDidClickOriginalButton:(UIButton *)originalButton;
 
 - (void)ls_assetCollectionToolBarDidClickDoneButton;

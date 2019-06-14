@@ -119,7 +119,6 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -316,7 +315,7 @@ typedef void(^PHCoverImageBlock)(UIImage * coverImg);
 - (PHImageRequestOptions *)options {
     if (!_options) {
         _options = [[PHImageRequestOptions alloc] init];
-        _options.synchronous = YES;//为了效果，我这里选择了同步 因为只获取一张照片，不会对界面产生很大的影响
+//        _options.synchronous = YES;//为了效果，我这里选择了同步 因为只获取一张照片，不会对界面产生很大的影响
         _options.resizeMode = PHImageRequestOptionsResizeModeFast;
         _options.deliveryMode = PHImageRequestOptionsDeliveryModeFastFormat;
     }

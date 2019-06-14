@@ -21,6 +21,10 @@
 		53536B192138D5C3005D6A0C /* LSAlbumListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53536B182138D5C3005D6A0C /* LSAlbumListCell.m */; };
 		53536B1E213920E7005D6A0C /* LSAssetItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53536B1D213920E7005D6A0C /* LSAssetItemCell.m */; };
 		536369D6213D315F003446DF /* NSIndexSet+LSAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = 536369D5213D315F003446DF /* NSIndexSet+LSAdd.m */; };
+		53958CB722B32C4200E06390 /* LSInterceptVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = 53958CB622B32C4200E06390 /* LSInterceptVideo.m */; };
+		53958CBA22B3446000E06390 /* LSInterceptView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53958CB922B3446000E06390 /* LSInterceptView.m */; };
+		53958CBE22B3486300E06390 /* LSVideoFrameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53958CBC22B3486300E06390 /* LSVideoFrameCell.m */; };
+		53958CBF22B3486300E06390 /* LSVideoFrameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53958CBD22B3486300E06390 /* LSVideoFrameCell.xib */; };
 		53A52D532137C0460061ECAD /* LSAssetCollectionListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A52D522137C0460061ECAD /* LSAssetCollectionListVC.m */; };
 		53A52D562137C05E0061ECAD /* LSAssetCollectionVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A52D552137C05E0061ECAD /* LSAssetCollectionVC.m */; };
 		53A52D602137C4130061ECAD /* LSPhotoSelectNavC.m in Sources */ = {isa = PBXBuildFile; fileRef = 53A52D5F2137C4130061ECAD /* LSPhotoSelectNavC.m */; };
@@ -81,6 +85,13 @@
 		536369D4213D315F003446DF /* NSIndexSet+LSAdd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSIndexSet+LSAdd.h"; sourceTree = "<group>"; };
 		536369D5213D315F003446DF /* NSIndexSet+LSAdd.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSIndexSet+LSAdd.m"; sourceTree = "<group>"; };
 		536369D7213D32D2003446DF /* LSCategory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSCategory.h; sourceTree = "<group>"; };
+		53958CB522B32C4200E06390 /* LSInterceptVideo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSInterceptVideo.h; sourceTree = "<group>"; };
+		53958CB622B32C4200E06390 /* LSInterceptVideo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSInterceptVideo.m; sourceTree = "<group>"; };
+		53958CB822B3446000E06390 /* LSInterceptView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSInterceptView.h; sourceTree = "<group>"; };
+		53958CB922B3446000E06390 /* LSInterceptView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSInterceptView.m; sourceTree = "<group>"; };
+		53958CBB22B3486300E06390 /* LSVideoFrameCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSVideoFrameCell.h; sourceTree = "<group>"; };
+		53958CBC22B3486300E06390 /* LSVideoFrameCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSVideoFrameCell.m; sourceTree = "<group>"; };
+		53958CBD22B3486300E06390 /* LSVideoFrameCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LSVideoFrameCell.xib; sourceTree = "<group>"; };
 		53A52D512137C0460061ECAD /* LSAssetCollectionListVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSAssetCollectionListVC.h; sourceTree = "<group>"; };
 		53A52D522137C0460061ECAD /* LSAssetCollectionListVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSAssetCollectionListVC.m; sourceTree = "<group>"; };
 		53A52D542137C05E0061ECAD /* LSAssetCollectionVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSAssetCollectionVC.h; sourceTree = "<group>"; };
@@ -149,6 +160,7 @@
 		5335299D2157370500E80558 /* LSPhotoSelect */ = {
 			isa = PBXGroup;
 			children = (
+				53958CB122B32BA800E06390 /* SourceCrop */,
 				53B44C9D214F4FA300ECA86D /* SaveToAlbum */,
 				536369D3213D3118003446DF /* Category */,
 				53A52D572137C09C0061ECAD /* PhotoBrowse */,
@@ -224,6 +236,44 @@
 				536369D7213D32D2003446DF /* LSCategory.h */,
 			);
 			path = Category;
+			sourceTree = "<group>";
+		};
+		53958CB122B32BA800E06390 /* SourceCrop */ = {
+			isa = PBXGroup;
+			children = (
+				53958CB222B32BE300E06390 /* Controller */,
+				53958CB422B32BF100E06390 /* Model */,
+				53958CB322B32BEB00E06390 /* View */,
+			);
+			path = SourceCrop;
+			sourceTree = "<group>";
+		};
+		53958CB222B32BE300E06390 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				53958CB522B32C4200E06390 /* LSInterceptVideo.h */,
+				53958CB622B32C4200E06390 /* LSInterceptVideo.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		53958CB322B32BEB00E06390 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				53958CB822B3446000E06390 /* LSInterceptView.h */,
+				53958CB922B3446000E06390 /* LSInterceptView.m */,
+				53958CBB22B3486300E06390 /* LSVideoFrameCell.h */,
+				53958CBC22B3486300E06390 /* LSVideoFrameCell.m */,
+				53958CBD22B3486300E06390 /* LSVideoFrameCell.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		53958CB422B32BF100E06390 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		53A52D4D2137803B0061ECAD /* PhotoSelect */ = {
@@ -424,6 +474,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 53530E7E21377CD90051D731;
 			productRefGroup = 53530E8821377CD90051D731 /* Products */;
@@ -444,6 +495,7 @@
 			files = (
 				53530E9721377CDC0051D731 /* LaunchScreen.storyboard in Resources */,
 				53530E9421377CDC0051D731 /* Assets.xcassets in Resources */,
+				53958CBF22B3486300E06390 /* LSVideoFrameCell.xib in Resources */,
 				53530E9221377CD90051D731 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -530,10 +582,13 @@
 				53A52D532137C0460061ECAD /* LSAssetCollectionListVC.m in Sources */,
 				53B44CA0214F4FE300ECA86D /* LSSaveToAlbum.m in Sources */,
 				53A52D602137C4130061ECAD /* LSPhotoSelectNavC.m in Sources */,
+				53958CBA22B3446000E06390 /* LSInterceptView.m in Sources */,
 				5321500C2140DB61006C058E /* LSAssetCollectionToolBar.m in Sources */,
+				53958CB722B32C4200E06390 /* LSInterceptVideo.m in Sources */,
 				53536B162138D2BB005D6A0C /* LSAlbumModel.m in Sources */,
 				53A52D652137E8B90061ECAD /* UIViewController+LSAuthorization.m in Sources */,
 				53530E8F21377CD90051D731 /* ViewController.m in Sources */,
+				53958CBE22B3486300E06390 /* LSVideoFrameCell.m in Sources */,
 				53B44CA3214F575400ECA86D /* NSObject+LSAuthorization.m in Sources */,
 				53536B192138D5C3005D6A0C /* LSAlbumListCell.m in Sources */,
 				53A52D562137C05E0061ECAD /* LSAssetCollectionVC.m in Sources */,

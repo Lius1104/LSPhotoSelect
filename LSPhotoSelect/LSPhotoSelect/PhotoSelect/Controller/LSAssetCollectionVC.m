@@ -10,6 +10,8 @@
 #import "LSAssetItemCell.h"
 #import "LSAssetCollectionToolBar.h"
 
+#import "LSInterceptVideo.h"//视频裁剪
+
 @interface LSAssetCollectionVC ()<UICollectionViewDelegate, UICollectionViewDataSource, PHPhotoLibraryChangeObserver, LSAssetCollectionToolBarDelegate> {
     CGRect previousPreheatRect;
 }
@@ -420,6 +422,15 @@
 - (void)ls_assetCollectionToolBarDidClickPreviewButton {
     // 跳转到 图片浏览
     NSUInteger currentIndex = 0;
+}
+
+- (void)ls_assetCollectionToolBarDidClickCropButton {
+    if ([self.selectedSource count] == 0) {
+        return;
+    }
+    PHAsset * asset = [self.selectedSource objectAtIndex:0];
+    LSInterceptVideo * vc = [[LSInterceptVideo alloc] initWithAsset:asset defaultDuration:30 * 60];
+    [self presentViewController:vc animated:NO completion:nil];
 }
 
 - (void)ls_assetCollectionToolBarDidClickOriginalButton:(UIButton *)originalButton {

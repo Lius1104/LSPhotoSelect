@@ -17,6 +17,8 @@
 
 @property (nonatomic, strong) UIButton * previewButton;
 
+@property (nonatomic, strong) UIButton * cropButton;
+
 @property (nonatomic, strong) UIButton * originalButton;
 
 @property (nonatomic, strong) UIButton * doneButton;
@@ -63,6 +65,13 @@
     [_previewButton addTarget:self action:@selector(handleClickPreviewButton:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_previewButton];
     
+    _cropButton = [UIButton buttonWithType:UIButtonTypeSystem];
+//    _cropButton.tintColor =
+    [_cropButton setTitle:@"裁剪" forState:UIControlStateNormal];
+    [_cropButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [_cropButton addTarget:self action:@selector(handleClickCropButton:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:_cropButton];
+    
     _originalButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_originalButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     _originalButton.titleLabel.font = [UIFont systemFontOfSize:15];
@@ -70,7 +79,6 @@
     [_originalButton setImage:[UIImage imageNamed:@"source_normal"] forState:UIControlStateNormal];
     [_originalButton setImage:[UIImage imageNamed:@"source_selected"] forState:UIControlStateSelected];
     _originalButton.imageEdgeInsets = UIEdgeInsetsMake(0, -5, 0, 5);
-//    _originalButton.titleEdgeInsets = UIEdgeInsetsMake(0, 5, 0, -5);
     _originalButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [_originalButton addTarget:self action:@selector(handleClickOriginalButton:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_originalButton];
@@ -82,9 +90,6 @@
     [_doneButton addTarget:self action:@selector(handleClickDoneButton:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_doneButton];
     
-//    _previewButton.backgroundColor = [UIColor redColor];
-//    _originalButton.backgroundColor = [UIColor blueColor];
-//    _doneButton.backgroundColor = [UIColor greenColor];
     [_previewButton setTitle:@"预览" forState:UIControlStateNormal];
     [_doneButton setTitle:@"确定" forState:UIControlStateNormal];
     
@@ -92,6 +97,8 @@
     
     if (!_isShowOriginal) {
         _originalButton.hidden = YES;
+    } else {
+        _cropButton.hidden = YES;
     }
 }
 
@@ -103,12 +110,20 @@
         make.height.mas_equalTo(35);
     }];
     
+    [_cropButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.equalTo(self.previewButton.mas_trailing).offset(12);
+        make.centerY.equalTo(self);
+        make.width.mas_equalTo(50);
+        make.height.mas_equalTo(35);
+    }];
+    
     [_originalButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(self.previewButton.mas_trailing).offset(20);
         make.centerY.equalTo(self);
         make.width.mas_equalTo(80);
         make.height.mas_equalTo(35);
     }];
+    
     [_doneButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.trailing.equalTo(self.mas_trailing).offset(-20);
         make.centerY.equalTo(self);
@@ -138,6 +153,12 @@
 - (void)handleClickPreviewButton:(UIButton *)sender {
     if ([self.delegate respondsToSelector:@selector(ls_assetCollectionToolBarDidClickPreviewButton)]) {
         [self.delegate ls_assetCollectionToolBarDidClickPreviewButton];
+    }
+}
+
+- (void)handleClickCropButton:(UIButton *)sender {
+    if ([self.delegate respondsToSelector:@selector(ls_assetCollectionToolBarDidClickCropButton)]) {
+        [self.delegate ls_assetCollectionToolBarDidClickCropButton];
     }
 }
 
