@@ -9,7 +9,7 @@
 #import "LSInterceptVideo.h"
 #import "LSInterceptView.h"
 
-@interface LSInterceptVideo ()
+@interface LSInterceptVideo ()<LSInterceptViewDelegate>
 
 @property (nonatomic, strong) UIView * playerView;
 @property (nonatomic, strong) AVPlayer * player;
@@ -26,9 +26,18 @@
 
 @property (nonatomic, strong) PHVideoRequestOptions * videoOptions;
 
+@property (nonatomic, weak) NSTimer * timer;
+@property (nonatomic, assign) CMTime startRange;
+@property (nonatomic, assign) CGFloat playDuration;
+
 @end
 
 @implementation LSInterceptVideo
+
+- (void)dealloc {
+    _player = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 - (instancetype)initWithAsset:(PHAsset *)asset defaultDuration:(NSUInteger)duration {
     self = [super init];
@@ -55,7 +64,10 @@
     [self.view layoutIfNeeded];
     CGRect bounds = self.playerView.bounds;
     _playerLayer.frame = bounds;
-    NSLog(@"%@", NSStringFromCGRect(bounds));
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleApplicationWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleApplicationDidBecomActive) name:UIApplicationDidBecomeActiveNotification object:nil];
+
     // phasset转化成 avasset
     __weak typeof(self) weak_self = self;
     [[PHImageManager defaultManager] requestAVAssetForVideo:_asset options:self.videoOptions resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
@@ -70,9 +82,6 @@
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    
-//    self.playerLayer.frame = self.playerView.bounds;
-
 }
 
 - (void)configSubivews {
@@ -115,19 +124,78 @@
     return YES;
 }
 
+- (void)startTimer {
+    [self stopTimer];
+    
+    _timer = [NSTimer scheduledTimerWithTimeInterval:_playDuration target:self selector:@selector(handlePlayPartVideo:) userInfo:nil repeats:YES];
+    [_timer fire];
+    [[NSRunLoop mainRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
+}
+
+- (void)stopTimer {
+    [_timer invalidate];
+    _timer = nil;
+    [self.playerLayer.player pause];
+}
+
 #pragma mark - action
 - (void)handleClickCancelButton {
+    [self stopTimer];
+    [_operationView stopProgress];
     [self dismissViewControllerAnimated:NO completion:nil];
 }
 
 - (void)handleClickDoneButton {
-    
+    [self stopTimer];
+    [_operationView stopProgress];
+    //裁剪当前视频
+}
+
+- (void)handlePlayPartVideo:(NSTimer *)timer {
+    [self.player seekToTime:_startRange toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+    [self.player play];
+}
+
+- (void)handleApplicationWillResignActive {
+    [_operationView stopProgress];
+    [self stopTimer];
+}
+
+- (void)handleApplicationDidBecomActive {
+    [_operationView startProgress];
+    [self startTimer];
+}
+
+#pragma mark - LSInterceptViewDelegate
+- (void)ls_interceptViewDidChanged:(CMTime)time {
+    [self.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+    [self stopTimer];
+    [self.player pause];
+}
+
+- (void)ls_interceptViewDidEndChangeTime:(CMTime)time duration:(CGFloat)duration {
+    _startRange = time;
+    _playDuration = duration;
+    [self startTimer];
+}
+
+- (void)ls_interceptViewDidSeekToTime:(CMTime)time {
+    [self stopTimer];
+    [self.playerLayer.player seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
 }
 
 #pragma mark - getter or setter
 - (void)setAvasset:(AVAsset *)avasset {
     _avasset = avasset;
+    _startRange = CMTimeMakeWithSeconds(0, avasset.duration.timescale);
     _operationView.asset = avasset;
+    _playDuration = 0;
+    if (_asset.duration < 15) {
+        _playDuration = _asset.duration;
+    } else {
+        _playDuration = 15;
+    }
+    [self startTimer];
 }
 
 - (UIButton *)cancelButton {
@@ -159,7 +227,8 @@
 - (LSInterceptView *)operationView {
     if (!_operationView) {
         _operationView = [[LSInterceptView alloc] initWithAsset:nil videoDuration:0];
-        _operationView.backgroundColor = [UIColor whiteColor];
+        _operationView.backgroundColor = [UIColor blackColor];
+        _operationView.delegate = self;
         [self.view addSubview:_operationView];
     }
     return _operationView;
@@ -188,7 +257,7 @@
     if (!_playerLayer) {
         _playerLayer = [[AVPlayerLayer alloc] init];
         _playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
-        _playerLayer.backgroundColor = [UIColor whiteColor].CGColor;
+        _playerLayer.backgroundColor = [UIColor blackColor].CGColor;
     }
     return _playerLayer;
 }

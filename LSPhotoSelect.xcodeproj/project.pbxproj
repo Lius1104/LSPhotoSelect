@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1B11BC066B221BD1FA3D30B4 /* libPods-LSPhotoSelectTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 06E67A0BC68F267A7D9E2DFE /* libPods-LSPhotoSelectTests.a */; };
 		5321500C2140DB61006C058E /* LSAssetCollectionToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 5321500B2140DB61006C058E /* LSAssetCollectionToolBar.m */; };
+		53467B0F22B72D9B0084579E /* LSEditFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 53467B0E22B72D9B0084579E /* LSEditFrameView.m */; };
 		53530E8C21377CD90051D731 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 53530E8B21377CD90051D731 /* AppDelegate.m */; };
 		53530E8F21377CD90051D731 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53530E8E21377CD90051D731 /* ViewController.m */; };
 		53530E9221377CD90051D731 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 53530E9021377CD90051D731 /* Main.storyboard */; };
@@ -57,6 +58,8 @@
 		3FD9EEEE95148A83BC6D17ED /* Pods-LSPhotoSelect.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LSPhotoSelect.release.xcconfig"; path = "Pods/Target Support Files/Pods-LSPhotoSelect/Pods-LSPhotoSelect.release.xcconfig"; sourceTree = "<group>"; };
 		5321500A2140DB61006C058E /* LSAssetCollectionToolBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSAssetCollectionToolBar.h; sourceTree = "<group>"; };
 		5321500B2140DB61006C058E /* LSAssetCollectionToolBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSAssetCollectionToolBar.m; sourceTree = "<group>"; };
+		53467B0D22B72D9B0084579E /* LSEditFrameView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LSEditFrameView.h; sourceTree = "<group>"; };
+		53467B0E22B72D9B0084579E /* LSEditFrameView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSEditFrameView.m; sourceTree = "<group>"; };
 		53530E8721377CD90051D731 /* LSPhotoSelect.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LSPhotoSelect.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		53530E8A21377CD90051D731 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		53530E8B21377CD90051D731 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -265,6 +268,8 @@
 				53958CBB22B3486300E06390 /* LSVideoFrameCell.h */,
 				53958CBC22B3486300E06390 /* LSVideoFrameCell.m */,
 				53958CBD22B3486300E06390 /* LSVideoFrameCell.xib */,
+				53467B0D22B72D9B0084579E /* LSEditFrameView.h */,
+				53467B0E22B72D9B0084579E /* LSEditFrameView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -587,6 +592,7 @@
 				53958CB722B32C4200E06390 /* LSInterceptVideo.m in Sources */,
 				53536B162138D2BB005D6A0C /* LSAlbumModel.m in Sources */,
 				53A52D652137E8B90061ECAD /* UIViewController+LSAuthorization.m in Sources */,
+				53467B0F22B72D9B0084579E /* LSEditFrameView.m in Sources */,
 				53530E8F21377CD90051D731 /* ViewController.m in Sources */,
 				53958CBE22B3486300E06390 /* LSVideoFrameCell.m in Sources */,
 				53B44CA3214F575400ECA86D /* NSObject+LSAuthorization.m in Sources */,

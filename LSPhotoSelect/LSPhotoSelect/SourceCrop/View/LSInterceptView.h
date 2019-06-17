@@ -8,13 +8,33 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol LSInterceptViewDelegate <NSObject>
+
+- (void)ls_interceptViewDidChanged:(CMTime)time;
+
+- (void)ls_interceptViewDidEndChangeTime:(CMTime)time duration:(CGFloat)duration;
+
+- (void)ls_interceptViewDidSeekToTime:(CMTime)time;
+
+@end
+
 //NS_ASSUME_NONNULL_BEGIN
 
 @interface LSInterceptView : UIView
 
+@property (nonatomic, assign, readonly) CGFloat timeUnit;
+@property (nonatomic, assign) CGRect validRect;
+
 @property (nonatomic, strong) AVAsset * asset;
 
+@property (nonatomic, weak) id <LSInterceptViewDelegate> delegate;
+
 - (instancetype)initWithAsset:(AVAsset *)asset videoDuration:(NSUInteger)duration;
+
+//- (void)updateFrame;
+- (void)startProgress;
+
+- (void)stopProgress;
 
 @end
 

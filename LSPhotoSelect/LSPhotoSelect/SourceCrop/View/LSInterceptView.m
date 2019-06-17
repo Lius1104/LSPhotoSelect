@@ -9,8 +9,9 @@
 #import "LSInterceptView.h"
 #import <objc/runtime.h>
 #import "LSVideoFrameCell.h"
+#import "LSEditFrameView.h"
 
-@interface LSInterceptView ()<UICollectionViewDelegate, UICollectionViewDataSource>
+@interface LSInterceptView ()<UICollectionViewDelegate, UICollectionViewDataSource, LSEditFrameViewDelegate>
 
 @property (nonatomic, assign) CGSize itemCellSize;
 
@@ -23,21 +24,20 @@
 
 @property (nonatomic, strong) AVAssetImageGenerator * generator;
 
-@property (nonatomic, strong) NSOperationQueue *queue;
+@property (nonatomic, strong) NSMutableArray * timeSource;
 @property (nonatomic, strong) NSMutableDictionary <NSString *, UIImage *> * imageCache;
-@property (nonatomic, strong) NSMutableDictionary <NSString *, NSBlockOperation *> * opCache;
-
-@property (nonatomic, assign) CGFloat timeUnit;
-@property (nonatomic, assign) int imageCount;
-
 
 @property (nonatomic, strong) UICollectionView * collection;
 
-@property (nonatomic, strong) UIView * cropView;
+@property (nonatomic, strong) LSEditFrameView * cropView;
+
+@property (nonatomic, strong) UIView * progressLine;
 
 @end
 
 @implementation LSInterceptView
+
+@synthesize validRect = _validRect;
 
 - (instancetype)initWithAsset:(AVAsset *)asset videoDuration:(NSUInteger)duration {
     self = [super init];
@@ -55,10 +55,15 @@
 - (void)commonInit {
     _itemCellSize = CGSizeMake(28, 50);
     _itemImgSize = CGSizeMake(56, 100);
+    CGFloat width = [UIScreen mainScreen].bounds.size.width;
+    _validRect = CGRectMake(45, 0, width - 45 * 2, _itemCellSize.height);
 }
 
 - (void)configSubviews {
     [self.collection mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self);
+    }];
+    [self.cropView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self);
     }];
 }
@@ -81,97 +86,148 @@
     
     //获取视频每帧的图片
     [self configImageSource];
+    
+    // 开始动画
+    [self startProgress];
 }
 
 - (void)configImageSource {
-    _timeUnit = 15 * 1.0f / 7.5;
-    _imageCount = _duration / _timeUnit;
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        for (int i = 0; i < count; i++) {
-//            CMTime item = CMTimeMake(timeUnit * i * self->_asset.duration.timescale, self->_asset.duration.timescale);
-//            NSError * err = nil;
-//            CGImageRef imageRef = [self->_generator copyCGImageAtTime:item actualTime:NULL error:&err];
-//            if (imageRef == nil || err) {
-//                continue;
-//            }
-//            UIImage * frameImage = imageRef ? [UIImage imageWithCGImage:imageRef] : nil;
-//            CGImageRelease(imageRef);
-//            if (frameImage == nil) {
-//                continue;
-//            }
-//            [self.imageSource addObject:frameImage];
-//        }
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [self.collection reloadData];
-//        });
-//    });
+    _timeUnit = 1.f;
+    NSUInteger imageCount = 0;
+    if (_duration <= 15) {
+        _timeUnit = _duration / 10.f;
+        imageCount = 10;
+    } else {
+        _timeUnit = 1.5f;
+        imageCount = _duration / 1.5f;
+    }
+    NSLog(@"before : %@", [NSDate date]);
+    for (int i = 0; i < imageCount; i++) {
+        CMTime item = CMTimeMake(_timeUnit * i * self->_asset.duration.timescale, self->_asset.duration.timescale);
+        [self.timeSource addObject:[NSValue valueWithCMTime:item]];
+    }
+    NSLog(@"after : %@", [NSDate date]);
     [self.collection reloadData];
+}
+
+//- (void)updateFrame {
+//    self.validRect = CGRectMake(45, 0, CGRectGetWidth(self.frame) - 45 * 2, _itemCellSize.height);
+//}
+
+- (CMTime)getStartTime {
+    CGRect rect = [self.collection convertRect:self.cropView.validRect fromView:self.cropView];
+    CGFloat s = MAX(0, _timeUnit * rect.origin.x / (_itemCellSize.width));
+    return CMTimeMakeWithSeconds(s, _asset.duration.timescale);
+}
+
+- (void)startProgress {
+    [self stopProgress];
+    
+    CGFloat duration = _timeUnit * self.validRect.size.width / (_itemCellSize.width);
+
+    self.progressLine.frame = CGRectMake(self.validRect.origin.x, 0, 2, _itemCellSize.height);
+    [self.cropView addSubview:_progressLine];
+    [UIView animateWithDuration:duration delay:.0 options:UIViewAnimationOptionRepeat | UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionCurveLinear animations:^{
+        self->_progressLine.frame = CGRectMake(CGRectGetMaxX(self->_validRect) - 2, 0, 2, self->_itemCellSize.height);
+    } completion:nil];
+}
+
+- (void)stopProgress {
+    [_progressLine removeFromSuperview];
+}
+
+#pragma mark - UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [self stopProgress];
+    if ([self.delegate respondsToSelector:@selector(ls_interceptViewDidSeekToTime:)]) {
+        [self.delegate ls_interceptViewDidSeekToTime:[self getStartTime]];
+    }
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    if (!decelerate) {
+        if ([self.delegate respondsToSelector:@selector(ls_interceptViewDidEndChangeTime:duration:)]) {
+            [self startProgress];
+            CGFloat duration = _timeUnit * self.validRect.size.width / (_itemCellSize.width);
+            [self.delegate ls_interceptViewDidEndChangeTime:[self getStartTime] duration:duration];
+        }
+        [self loadImageForOnScreenRows];
+    }
+}
+
+// table view 停止滚动了
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    if ([self.delegate respondsToSelector:@selector(ls_interceptViewDidEndChangeTime:duration:)]) {
+        [self startProgress];
+        CGFloat duration = _timeUnit * self.validRect.size.width / (_itemCellSize.width);
+        [self.delegate ls_interceptViewDidEndChangeTime:[self getStartTime] duration:duration];
+    }
+    [self loadImageForOnScreenRows];
+}
+
+//节约性能，只加载当前显示在屏幕上的cell包含的image
+- (void)loadImageForOnScreenRows {
+    [_generator cancelAllCGImageGeneration];
+    NSArray *visiableIndexPathes = [self.collection indexPathsForVisibleItems];
+    for (NSIndexPath * indexPath in visiableIndexPathes) {
+        UIImage * image = [self.imageCache objectForKey:[@(indexPath.row) stringValue]];
+        if (!image) {
+            LSVideoFrameCell * cell = (LSVideoFrameCell *)[self.collection cellForItemAtIndexPath:indexPath];
+            [self configCellImage:cell index:indexPath.row];
+        }
+    }
 }
 
 #pragma mark - UICollectionViewDelegate, UICollectionViewDataSource
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.imageCount;
+    return self.timeSource.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     LSVideoFrameCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"LSVideoFrameCell" forIndexPath:indexPath];
-    cell.imageView.image = self.imageCache[@(indexPath.row).stringValue];
+    UIImage * image = self.imageCache[@(indexPath.row).stringValue];
+    if (image) {
+        cell.imageView.image = image;
+    } else {
+        [self configCellImage:cell index:indexPath.row];
+    }
     return cell;
 }
 
-static const char _ZLOperationCellKey;
-- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (!_asset) return;
-    
-    if (_imageCache[@(indexPath.row).stringValue] || _opCache[@(indexPath.row).stringValue]) {
-        return;
-    }
-    
-    NSBlockOperation *op = [NSBlockOperation blockOperationWithBlock:^{
-        NSInteger row = indexPath.row;
-//        NSInteger i = row  * self->_timeUnit;
-        
-        CMTime time = CMTimeMake(row  * self->_timeUnit * self->_asset.duration.timescale, self->_asset.duration.timescale);
-        
-        NSError *error = nil;
-        CGImageRef cgImg = [self.generator copyCGImageAtTime:time actualTime:NULL error:&error];
-        if (!error && cgImg) {
-            UIImage *image = [UIImage imageWithCGImage:cgImg];
-            CGImageRelease(cgImg);
-            
-            [self->_imageCache setValue:image forKey:@(row).stringValue];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                NSIndexPath *nowIndexPath = [collectionView indexPathForCell:cell];
-                if (row == nowIndexPath.row) {
-                    [(LSVideoFrameCell *)cell imageView].image = image;
-                } else {
-                    UIImage *cacheImage = self->_imageCache[@(nowIndexPath.row).stringValue];
-                    if (cacheImage) {
-                        [(LSVideoFrameCell *)cell imageView].image = cacheImage;
-                    }
-                }
-            });
-            [self->_opCache removeObjectForKey:@(row).stringValue];
+- (void)configCellImage:(LSVideoFrameCell *)cell index:(NSUInteger)index {
+    NSValue * value = [self.timeSource objectAtIndex:index];
+    [_generator generateCGImagesAsynchronouslyForTimes:@[value] completionHandler:^(CMTime requestedTime, CGImageRef  _Nullable image, CMTime actualTime, AVAssetImageGeneratorResult result, NSError * _Nullable error) {
+        if (result == AVAssetImageGeneratorSucceeded) {
+            [self.imageCache setValue:[UIImage imageWithCGImage:image] forKey:[@(index) stringValue]];
+            [self performSelectorOnMainThread:@selector(handleUpdateCellImage:) withObject:cell waitUntilDone:NO];
         }
-        objc_removeAssociatedObjects(cell);
     }];
-    [self.queue addOperation:op];
-    [self.opCache setValue:op forKey:@(indexPath.row).stringValue];
-    
-    objc_setAssociatedObject(cell, &_ZLOperationCellKey, op, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSBlockOperation *op = objc_getAssociatedObject(cell, &_ZLOperationCellKey);
-    if (op) {
-        [op cancel];
-        objc_removeAssociatedObjects(cell);
-        [_opCache removeObjectForKey:@(indexPath.row).stringValue];
+- (void)handleUpdateCellImage:(LSVideoFrameCell *)cell {
+    NSIndexPath * indexPath = [self.collection indexPathForCell:cell];
+    UIImage * image = self.imageCache[@(indexPath.row).stringValue];
+    if (image) {
+//        cell.imageView.image = image;
+        [self.collection reloadData];
     }
 }
 
+#pragma mark - LSEditFrameViewDelegate
+- (void)ls_editFrameValidRectChanged {
+    if ([self.delegate respondsToSelector:@selector(ls_interceptViewDidChanged:)]) {
+        [self stopProgress];
+        [self.delegate ls_interceptViewDidChanged:[self getStartTime]];
+    }
+}
+
+- (void)ls_editFrameValidRectEndChange {
+    if ([self.delegate respondsToSelector:@selector(ls_interceptViewDidEndChangeTime:duration:)]) {
+        [self startProgress];
+        CGFloat duration = _timeUnit * self.validRect.size.width / (_itemCellSize.width);
+        [self.delegate ls_interceptViewDidEndChangeTime:[self getStartTime] duration:duration];
+    }
+}
 
 #pragma mark - getter or setter
 - (UICollectionView *)collection {
@@ -193,12 +249,11 @@ static const char _ZLOperationCellKey;
     return _collection;
 }
 
-- (NSOperationQueue *)queue {
-    if (!_queue) {
-        _queue = [[NSOperationQueue alloc] init];
-        _queue.maxConcurrentOperationCount = 3;
+- (NSMutableArray *)timeSource {
+    if (!_timeSource) {
+        _timeSource = [NSMutableArray arrayWithCapacity:1];
     }
-    return _queue;
+    return _timeSource;
 }
 
 - (NSMutableDictionary<NSString *,UIImage *> *)imageCache {
@@ -208,11 +263,35 @@ static const char _ZLOperationCellKey;
     return _imageCache;
 }
 
-- (NSMutableDictionary<NSString *,NSBlockOperation *> *)opCache {
-    if (!_opCache) {
-        _opCache = [[NSMutableDictionary alloc] init];
+- (LSEditFrameView *)cropView {
+    if (!_cropView) {
+        _cropView = [[LSEditFrameView alloc] initWithItemSize:_itemCellSize initRect:_validRect];
+        _cropView.delegate = self;
+        _cropView.validRect = _validRect;
+        [self addSubview:_cropView];
     }
-    return _opCache;
+    return _cropView;
+}
+
+- (UIView *)progressLine {
+    if (!_progressLine) {
+        _progressLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 2, _itemCellSize.height)];
+        _progressLine.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:.7];
+    }
+    return _progressLine;
+}
+
+- (void)setValidRect:(CGRect)validRect {
+    if (validRect.origin.x == _validRect.origin.x && validRect.origin.y == _validRect.origin.y && _validRect.size.width == validRect.size.width && _validRect.size.height == validRect.size.height) {
+    } else {
+        _validRect = validRect;
+        _cropView.validRect = _validRect;
+    }
+}
+
+- (CGRect)validRect {
+    _validRect = _cropView.validRect;
+    return _validRect;
 }
 
 @end

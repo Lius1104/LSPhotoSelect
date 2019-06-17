@@ -21,7 +21,7 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rhs-fv-62g">
                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_cover" translatesAutoresizingMaskIntoConstraints="NO" id="fz8-Es-Hci">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fz8-Es-Hci">
                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                             </imageView>
                         </subviews>
@@ -46,7 +46,4 @@
             </connections>
         </collectionViewCell>
     </objects>
-    <resources>
-        <image name="default_cover" width="60" height="60"/>
-    </resources>
 </document>
