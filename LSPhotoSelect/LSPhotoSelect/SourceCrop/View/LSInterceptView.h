@@ -31,7 +31,10 @@
 
 - (instancetype)initWithAsset:(AVAsset *)asset videoDuration:(NSUInteger)duration;
 
-//- (void)updateFrame;
+- (CMTime)getStartTime;
+
+- (CMTime)getEndTime;
+
 - (void)startProgress;
 
 - (void)stopProgress;

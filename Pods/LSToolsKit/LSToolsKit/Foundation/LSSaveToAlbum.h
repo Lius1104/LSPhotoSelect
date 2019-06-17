@@ -7,6 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Photos/Photos.h>
+
+typedef void(^SuccessBlock)(NSString * assetLocalId);
 
 @interface LSSaveToAlbum : NSObject
 
@@ -14,10 +17,10 @@
 
 - (void)configCustomAlbumName:(NSString *)customName;
 
-- (void)saveImage:(UIImage *)image;
+- (void)saveImage:(UIImage *)image successBlock:(SuccessBlock)block;
 
-- (void)saveImageWithUrl:(NSURL *)imgUrl;
+- (void)saveImageWithUrl:(NSURL *)imgUrl successBlock:(SuccessBlock)block;
 
-- (void)saveVideoWithUrl:(NSURL *)videoUrl;
+- (void)saveVideoWithUrl:(NSURL *)videoUrl successBlock:(SuccessBlock)block;
 
 @end

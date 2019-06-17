@@ -36,7 +36,7 @@
     self.albumName = customName;
 }
 
-- (void)saveImage:(UIImage *)image {
+- (void)saveImage:(UIImage *)image successBlock:(SuccessBlock)block {
     __block NSString * Identify = nil;
     [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
         if (@available(iOS 9.0, *)) {
@@ -47,14 +47,16 @@
     } completionHandler:^(BOOL success, NSError * _Nullable error) {
         if (success == NO) {
             NSLog(@"保存到系统相册失败");
+            block(nil);
             return;
         }
+        block(Identify);
         // 添加索引到自定义相册
         [self saveToCustomAlbum:Identify];
     }];
 }
 
-- (void)saveImageWithUrl:(NSURL *)imgUrl {
+- (void)saveImageWithUrl:(NSURL *)imgUrl successBlock:(SuccessBlock)block {
     __block NSString * Identify = nil;
     [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
         if (@available(iOS 9.0, *)) {
@@ -65,13 +67,15 @@
     } completionHandler:^(BOOL success, NSError * _Nullable error) {
         if (success == NO) {
             NSLog(@"保存到系统相册失败");
+            block(nil);
             return;
         }
+        block(Identify);
         [self saveToCustomAlbum:Identify];
     }];
 }
 
-- (void)saveVideoWithUrl:(NSURL *)videoUrl {
+- (void)saveVideoWithUrl:(NSURL *)videoUrl successBlock:(SuccessBlock)block {
     __block NSString * Identify = nil;
     [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
         if (@available(iOS 9.0, *)) {
@@ -82,8 +86,10 @@
     } completionHandler:^(BOOL success, NSError * _Nullable error) {
         if (success == NO) {
             NSLog(@"保存到系统相册失败");
+            block(nil);
             return;
         }
+        block(Identify);
         [self saveToCustomAlbum:Identify];
     }];
 }

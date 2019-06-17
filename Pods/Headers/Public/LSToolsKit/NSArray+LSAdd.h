@@ -1,0 +1,1 @@
+../../../LSToolsKit/LSToolsKit/Foundation/NSArray+LSAdd.h

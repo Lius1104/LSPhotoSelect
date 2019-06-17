@@ -7,6 +7,8 @@ target 'LSPhotoSelect' do
 
   # Pods for LSPhotoSelect
 pod 'Masonry'
+pod 'LSToolsKit'
+pod 'MBProgressHUD'
 
   target 'LSPhotoSelectTests' do
     inherit! :search_paths

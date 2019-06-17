@@ -15,6 +15,7 @@
 
 #import "LSPhotoBrowse.h"
 #import "LSPhotoSelect.h"
+#import "LSSourceCrop.h"
 
 
 #endif /* LSPrefixHeader_h */

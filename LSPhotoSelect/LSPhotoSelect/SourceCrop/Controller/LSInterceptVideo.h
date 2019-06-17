@@ -8,9 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol LSInterceptVideoDelegate <NSObject>
+
+- (void)ls_interceptVideoDidCropVideo:(NSString *)assetLocalId;
+
+@end
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface LSInterceptVideo : UIViewController
+
+@property (nonatomic, weak) id <LSInterceptVideoDelegate> delegate;
 
 @property (nonatomic, strong, readonly) PHAsset * asset;
 

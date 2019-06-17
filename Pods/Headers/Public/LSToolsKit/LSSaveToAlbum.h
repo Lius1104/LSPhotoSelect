@@ -1,0 +1,1 @@
+../../../LSToolsKit/LSToolsKit/Foundation/LSSaveToAlbum.h

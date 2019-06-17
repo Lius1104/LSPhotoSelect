@@ -8,6 +8,8 @@
 
 #import "LSInterceptVideo.h"
 #import "LSInterceptView.h"
+#import "LSSaveToAlbum.h"
+#import <MBProgressHUD/MBProgressHUD.h>
 
 @interface LSInterceptVideo ()<LSInterceptViewDelegate>
 
@@ -29,6 +31,8 @@
 @property (nonatomic, weak) NSTimer * timer;
 @property (nonatomic, assign) CMTime startRange;
 @property (nonatomic, assign) CGFloat playDuration;
+
+@property (nonatomic, strong) MBProgressHUD * hud;
 
 @end
 
@@ -138,6 +142,64 @@
     [self.playerLayer.player pause];
 }
 
+- (void)cropVideo {
+    if (_hud) {
+        [_hud hideAnimated:YES];
+        _hud = nil;
+    }
+    _hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    CMTime end = [_operationView getEndTime];
+    [[PHImageManager defaultManager] requestExportSessionForVideo:_asset options:self.videoOptions exportPreset:AVAssetExportPresetPassthrough resultHandler:^(AVAssetExportSession * _Nullable exportSession, NSDictionary * _Nullable info) {
+        CMTimeRange range = CMTimeRangeMake(self->_startRange, end);
+        exportSession.timeRange = range;
+        exportSession.shouldOptimizeForNetworkUse = YES;
+        NSString *filePath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES) firstObject];
+        filePath = [NSString stringWithFormat:@"%@/cropVideo.mp4", filePath];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+            [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+        }
+        exportSession.outputURL = [NSURL fileURLWithPath:filePath];
+        exportSession.outputFileType = AVFileTypeMPEG4;
+        [exportSession exportAsynchronouslyWithCompletionHandler:^{
+            switch (exportSession.status) {
+                case AVAssetExportSessionStatusUnknown:
+                    break;
+                case AVAssetExportSessionStatusWaiting:
+                    break;
+                case AVAssetExportSessionStatusExporting:
+                    break;
+                case AVAssetExportSessionStatusCompleted: {
+                    [[LSSaveToAlbum mainSave] saveVideoWithUrl:[NSURL fileURLWithPath:filePath] successBlock:^(NSString *assetLocalId) {
+                        if ([assetLocalId length] > 0) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                [self->_hud hideAnimated:YES];
+                                [self dismissViewControllerAnimated:YES completion:nil];
+                                if ([self.delegate respondsToSelector:@selector(ls_interceptVideoDidCropVideo:)]) {
+                                    [self.delegate ls_interceptVideoDidCropVideo:assetLocalId];
+                                }
+                            });
+                        } else {
+                            self->_hud.label.text = @"保存到本地相册失败";
+                            [self->_hud hideAnimated:YES afterDelay:1.5];
+                        }
+                    }];
+                }
+                    break;
+                case AVAssetExportSessionStatusFailed:
+                    self->_hud.label.text = @"裁剪失败，请重试";
+                    [self->_hud hideAnimated:YES afterDelay:1.5];
+                    break;
+                case AVAssetExportSessionStatusCancelled:
+                    self->_hud.label.text = @"裁剪被取消，请重试";
+                    [self->_hud hideAnimated:YES afterDelay:1.5];
+                    break;
+                default:
+                    break;
+            }
+        }];
+    }];
+}
+
 #pragma mark - action
 - (void)handleClickCancelButton {
     [self stopTimer];
@@ -149,6 +211,7 @@
     [self stopTimer];
     [_operationView stopProgress];
     //裁剪当前视频
+    [self cropVideo];
 }
 
 - (void)handlePlayPartVideo:(NSTimer *)timer {
@@ -190,10 +253,10 @@
     _startRange = CMTimeMakeWithSeconds(0, avasset.duration.timescale);
     _operationView.asset = avasset;
     _playDuration = 0;
-    if (_asset.duration < 15) {
+    if (_asset.duration < kMaximumDuration) {
         _playDuration = _asset.duration;
     } else {
-        _playDuration = 15;
+        _playDuration = kMaximumDuration;
     }
     [self startTimer];
 }

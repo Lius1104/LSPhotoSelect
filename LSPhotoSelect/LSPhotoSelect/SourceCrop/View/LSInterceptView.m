@@ -94,7 +94,7 @@
 - (void)configImageSource {
     _timeUnit = 1.f;
     NSUInteger imageCount = 0;
-    if (_duration <= 15) {
+    if (_duration <= kMaximumDuration) {
         _timeUnit = _duration / 10.f;
         imageCount = 10;
     } else {
@@ -110,13 +110,15 @@
     [self.collection reloadData];
 }
 
-//- (void)updateFrame {
-//    self.validRect = CGRectMake(45, 0, CGRectGetWidth(self.frame) - 45 * 2, _itemCellSize.height);
-//}
-
 - (CMTime)getStartTime {
     CGRect rect = [self.collection convertRect:self.cropView.validRect fromView:self.cropView];
     CGFloat s = MAX(0, _timeUnit * rect.origin.x / (_itemCellSize.width));
+    return CMTimeMakeWithSeconds(s, _asset.duration.timescale);
+}
+
+- (CMTime)getEndTime {
+    CGRect rect = [self.collection convertRect:self.cropView.validRect fromView:self.cropView];
+    CGFloat s = MAX(0, _timeUnit * CGRectGetMaxX(rect) / (_itemCellSize.width));
     return CMTimeMakeWithSeconds(s, _asset.duration.timescale);
 }
 

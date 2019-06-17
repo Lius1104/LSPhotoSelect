@@ -1,0 +1,1 @@
+../../../LSToolsKit/LSToolsKit/UIKit/Image/UIImage+HEIC.h
