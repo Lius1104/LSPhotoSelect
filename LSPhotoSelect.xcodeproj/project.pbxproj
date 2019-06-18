@@ -329,19 +329,11 @@
 		53A52D572137C09C0061ECAD /* PhotoBrowse */ = {
 			isa = PBXGroup;
 			children = (
-				53A52D582137C0B50061ECAD /* Controller */,
 				53A52D5A2137C0C20061ECAD /* Model */,
 				53A52D592137C0BC0061ECAD /* View */,
 				53A52D5B2137C11C0061ECAD /* LSPhotoBrowse.h */,
 			);
 			path = PhotoBrowse;
-			sourceTree = "<group>";
-		};
-		53A52D582137C0B50061ECAD /* Controller */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Controller;
 			sourceTree = "<group>";
 		};
 		53A52D592137C0BC0061ECAD /* View */ = {

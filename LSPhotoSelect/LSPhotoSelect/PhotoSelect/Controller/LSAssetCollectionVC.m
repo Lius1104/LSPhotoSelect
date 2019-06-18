@@ -458,6 +458,7 @@
         [_collectionView registerClass:[LSAssetItemCell class] forCellWithReuseIdentifier:@"ls_assetItem_Cell"];
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
+        _collectionView.allowsMultipleSelection = YES;
         [self.view addSubview:_collectionView];
     }
     return _collectionView;
